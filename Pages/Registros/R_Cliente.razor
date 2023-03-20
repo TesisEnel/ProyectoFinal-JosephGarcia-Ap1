@@ -1,0 +1,161 @@
+@page "/cliente"
+@page "/cliente/{ClienteId:int}"
+
+<PageTitle>Registro Cliente</PageTitle>
+
+@inject ClienteBLL clienteBLL
+@inject NotificationService notificationService
+
+<EditForm Model="cliente" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator/>
+    <div class="card">
+        <div class="card-header">
+            <h1>Registro para Clientes</h1>
+        </div>
+
+        <div class="card-body">
+
+            @*ClienteId*@
+            <div class="form-group">
+                <label>ClienteId</label><br>
+                <InputNumber @bind-Value= "cliente.ClienteId" class="form-control"/> <br>
+                <button type="button" class="btn btn-primary input-group-text" @onclick="Buscar">
+                    <i class="oi oi-magnifying-glass"/>Buscar</button>
+            </div>
+
+            @*NombreCompleto*@
+            <div class="form-group">
+                <label>Nombre</label><br>
+                <InputText @bind-Value="cliente.NombreCompleto" class="form-control"/> <br>
+                <ValidationMessage For="@(() => cliente.NombreCompleto)"/>
+            </div>
+
+            @*Cedula*@
+            <div class="form-group">
+                <label>Cedula</label><br>
+                <InputText @bind-Value="cliente.Cedula" class="form-control"/> <br>
+                <ValidationMessage For="@(() => cliente.Cedula)"/>
+            </div>
+
+            @*Ciudad*@
+            <div class="form-group">
+                <label>Ciudad</label><br>
+                <InputText @bind-Value="cliente.Ciudad" class="form-control"/> <br>
+                <ValidationMessage For="@(() => cliente.Ciudad)"/>
+            </div>
+
+            @*Direccion*@
+            <div class="form-group">
+                <label>Direccion</label> <br>
+                <InputText @bind-Value="cliente.Direccion" class="form-control"/> <br>
+                <ValidationMessage For="@(() => cliente.Direccion)"/>
+            </div>
+
+            @*Telefono*@
+            <div class="form-group">
+                <label>Telefono</label> <br>
+                <InputText @bind-Value="cliente.Telefono" class="form-control"/> <br>
+                <ValidationMessage For="@(() => cliente.Telefono)"/>
+            </div>
+
+            <div class="card-footer">
+                <div class="form-group text-center" display: inline-block>
+                    <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo"><i class="oi oi-file" /> Nuevo </button>
+                    <button type="submit" class="btn btn-lg btn-success"><i class="oi oi-document" /> Guardar </button>
+                    <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar"><i class="oi oi-trash" /> Eliminar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</EditForm>
+
+@code{
+    [Parameter]
+    public int ClienteId {get;set;}
+
+    public Cliente cliente {get;set;} = new Cliente();
+
+    protected override void OnInitialized()
+    {
+        if(ClienteId > 0){
+            this.cliente.ClienteId= ClienteId;
+            this.Buscar();  
+        }
+     }
+
+    public void Nuevo()
+    {
+        cliente = new Cliente();
+    }
+
+    bool Validar()
+    {
+        return true;
+    }
+
+    public void Guardar()
+    {
+        bool Guardado;
+
+        if(!Validar())
+        {
+            return;
+        }
+
+        Guardado = clienteBLL.Guardar(cliente);
+
+        if(Guardado)
+        {
+            ShowNotification(
+                new NotificationMessage{
+                    Severity = NotificationSeverity.Success,
+                    Summary = "Guardado correctamente"
+                });
+            Nuevo();
+        }
+    }
+
+    private void Buscar()
+    {
+        if(cliente.ClienteId > 0)
+        {
+            var encontrado = clienteBLL.Buscar(cliente.ClienteId);
+
+            if(encontrado != null)
+            {
+                this.cliente = encontrado;
+            }
+        }
+    }
+
+    public void Eliminar()
+    {
+        if(clienteBLL.Eliminar(cliente.ClienteId)){
+            ShowNotification(
+                new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Info,
+                    Summary = "Se ha eliminado con exito."
+                }
+            );
+            Nuevo();
+        }
+        else{
+            ShowNotification(
+                new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "No hay elemento para borrar."
+                }
+            );
+            return;
+        }
+    }
+    
+    void ShowNotification(NotificationMessage message)
+    {
+        notificationService.Notify(message);
+    }
+}
+

@@ -1,0 +1,108 @@
+@page "/consultaCliente"
+
+<PageTitle>Consulta cliente</PageTitle>
+
+@inject ClienteBLL clienteBLL
+
+<EditForm Model="lista">
+    <div class="card">
+        <div class="card-header">
+            <h1>Consulta de clientes</h1>
+        </div>
+    
+    <div class="card-body">
+        <div  class="row">
+            <div class="col-3">
+                <label class="form-label">Criterio</label>
+                <input type="text" class="form-control" @bind="Criterio">
+        </div>
+
+        <div class="col-2">
+        <label class="form-label">Filtro</label>
+            <select class="form-control" @bind="Filtro">
+                <option value="1">ClienteId</option>
+                <option value="2">NombreCompleto</option>
+                <option value="3">Cedula</option>
+                <option value="4">Ciudad</option>
+                <option value="5">Direccion</option>
+                <option value="6">Telefono</option>
+                <option value="7">Todos</option>
+            </select>
+        </div>
+
+        <div class="col-3 d-flex align-items-end">
+            <button type="button" class="btn btn-primary input-group-text" @onclick="Buscar">
+            <i class="oi oi-magnifying-glass"/>Buscar</button>
+        </div>
+
+    </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ClienteId</th>
+                <th>NombreCompleto</th>
+                <th>Cedula</th>
+                <th>Ciudad</th>
+                <th>Direccion</th>
+                <th>Telefono</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in lista)
+            {
+                <tr>
+                    <td>@item.ClienteId</td>
+                    <td>@item.NombreCompleto</td>
+                    <td>@item.Cedula</td>
+                    <td>@item.Ciudad</td>
+                    <td>@item.Direccion</td>
+                    <td>@item.Telefono</td>
+                    <td><a href="cliente/@item.ClienteId">Ver</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>    
+</div>
+</EditForm>
+
+@code{
+    
+    public string Filtro {get;set;} = "";
+    public string Criterio {get;set;} = "";
+
+    public List<Cliente> lista {get;set;} = new List<Cliente>();
+
+        protected override void OnInitialized()
+        {
+            Buscar();
+        }
+
+        public void Buscar()
+        {
+            if (Filtro == "1")
+            {
+                lista = clienteBLL.GetList(o => o.ClienteId.ToString().Contains(Criterio));
+            }
+            else if ((Filtro == "2")){
+                lista = clienteBLL.GetList(o => (o.NombreCompleto ?? "").Contains(Criterio));
+            }
+            else if ((Filtro == "3")){
+                lista = clienteBLL.GetList(o => (o.Cedula ?? "").Contains(Criterio));
+            }
+            else if ((Filtro == "4")){
+                lista = clienteBLL.GetList(o => (o.Ciudad ?? "").Contains(Criterio));
+            }
+            else if ((Filtro == "5")){
+                lista = clienteBLL.GetList(o => (o.Direccion ?? "").Contains(Criterio));
+            }
+            else if ((Filtro == "6")){
+                lista = clienteBLL.GetList(o => (o.Telefono ?? "").Contains(Criterio));
+            }
+            else{
+                lista = clienteBLL.GetList(o => true);
+            }
+        }  
+}
+

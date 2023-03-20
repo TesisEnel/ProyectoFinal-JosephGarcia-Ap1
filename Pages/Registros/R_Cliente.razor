@@ -91,28 +91,28 @@
 
     bool Validar()
     {
-        return true;
-    }
-
-    public void Guardar()
-    {
-        bool Guardado;
-
-        if(!Validar())
-        {
-            return;
+        if(!String.IsNullOrEmpty(cliente.NombreCompleto)){
+            return true;
         }
 
-        Guardado = clienteBLL.Guardar(cliente);
+        return false;
+    } 
 
-        if(Guardado)
+
+    void Guardar()
+    {
+        if(!Validar()){return;}
+
+        if(clienteBLL.Guardar(this.cliente))
         {
             ShowNotification(
-                new NotificationMessage{
+                new NotificationMessage
+                {
                     Severity = NotificationSeverity.Success,
-                    Summary = "Guardado correctamente"
-                });
-            Nuevo();
+                    Summary = "Se ha guardado con exito."
+                }
+            );
+            this.Nuevo();
         }
     }
 

@@ -20,8 +20,14 @@ public class ClienteBLL{
 
     private bool Modificar(Cliente cliente)
     {
-        _contexto.Entry(cliente).State = EntityState.Modified;
-        return _contexto.SaveChanges() > 0;
+        var existe = _contexto.Cliente.Find(cliente.ClienteId);
+        if(existe != null)
+        {
+            _contexto.Entry(existe).CurrentValues.SetValues(cliente);
+            return _contexto.SaveChanges() > 0;
+        }
+
+        return false;
     }
 
     public bool Guardar(Cliente cliente){

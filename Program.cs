@@ -23,6 +23,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddScoped<ClienteBLL>();
+builder.Services.AddScoped<SuplidorBLL>();
 
 //Builders de las anotacciones.
 builder.Services.AddScoped<DialogService>();

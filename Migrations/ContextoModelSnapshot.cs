@@ -45,6 +45,36 @@ namespace ProyectoFinal.Migrations
 
                     b.ToTable("Cliente");
                 });
+
+            modelBuilder.Entity("Suplidor", b =>
+                {
+                    b.Property<int>("SuplidorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Marca")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("PrecioVenta")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("SuplidorId");
+
+                    b.ToTable("Suplidor");
+                });
 #pragma warning restore 612, 618
         }
     }

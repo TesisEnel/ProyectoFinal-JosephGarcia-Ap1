@@ -26,6 +26,23 @@ namespace ProyectoFinal.Migrations
                 {
                     table.PrimaryKey("PK_Cliente", x => x.ClienteId);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Suplidor",
+                columns: table => new
+                {
+                    SuplidorId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Marca = table.Column<string>(type: "TEXT", nullable: false),
+                    PrecioVenta = table.Column<double>(type: "REAL", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    Telefono = table.Column<string>(type: "TEXT", nullable: false),
+                    Direccion = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Suplidor", x => x.SuplidorId);
+                });
         }
 
         /// <inheritdoc />
@@ -33,6 +50,9 @@ namespace ProyectoFinal.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Cliente");
+
+            migrationBuilder.DropTable(
+                name: "Suplidor");
         }
     }
 }

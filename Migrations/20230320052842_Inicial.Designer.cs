@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ProyectoFinal.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20230318050235_Inicial")]
+    [Migration("20230320052842_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -47,6 +47,36 @@ namespace ProyectoFinal.Migrations
                     b.HasKey("ClienteId");
 
                     b.ToTable("Cliente");
+                });
+
+            modelBuilder.Entity("Suplidor", b =>
+                {
+                    b.Property<int>("SuplidorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Marca")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("PrecioVenta")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("SuplidorId");
+
+                    b.ToTable("Suplidor");
                 });
 #pragma warning restore 612, 618
         }

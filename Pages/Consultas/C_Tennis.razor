@@ -1,13 +1,13 @@
-@page "/consultaSuplidor"
+@page "/consultaTennis"
 
-<PageTitle>Consulta Suplidor</PageTitle>
+<PageTitle>Consulta Tennis</PageTitle>
 
-@inject SuplidorBLL suplidorBLL
+@inject TennisBLL tennisBLL
 
 <EditForm Model="lista">
     <div class="card">
         <div class="card-header">
-            <h1>Consulta de Suplidores</h1>
+            <h1>Consulta de Tennis</h1>
         </div>
     
     <div class="card-body">
@@ -20,13 +20,12 @@
         <div class="col-2">
         <label class="form-label">Filtro</label>
             <select class="form-control" @bind="Filtro">
-                <option value="1">SuplidorId</option>
+                <option value="1">TennisId</option>
                 <option value="2">Marca</option>
-                <option value="3">PrecioVenta</option>
-                <option value="4">Email</option>
-                <option value="5">Telefono</option>
-                <option value="6">Direccion</option>
-                <option value="7">Todos</option>
+                <option value="3">Costo</option>
+                <option value="4">Precio</option>
+                <option value="5">Existencia</option>
+                <option value="6">Todos</option>
             </select>
         </div>
 
@@ -41,25 +40,24 @@
     <table class="table">
         <thead>
             <tr>
-                <th>SuplidorId</th>
+                <th>TennisId</th>
                 <th>Marca</th>
-                <th>PrecioVenta</th>
-                <th>Email</th>
-                <th>Telefono</th>
-                <th>Direccion</th>
+                <th>Costo</th>
+                <th>Precio</th>
+                <th>Existencia</th>
+                <th>Todos</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in lista)
             {
                 <tr>
-                    <td>@item.SuplidorId</td>
+                    <td>@item.TenniId</td>
                     <td>@item.Marca</td>
-                    <td>@item.PrecioVenta</td>
-                    <td>@item.Email</td>
-                    <td>@item.Telefono</td>
-                    <td>@item.Direccion</td>
-                    <td><a href="suplidor/@item.SuplidorId">Ver</a></td>
+                    <td>@item.Costo</td>
+                    <td>@item.Precio</td>
+                    <td>@item.Existencia</td>
+                    <td><a href="tennis/@item.TenniId">Ver</a></td>
                 </tr>
             }
         </tbody>
@@ -72,7 +70,7 @@
     public string Filtro {get;set;} = "";
     public string Criterio {get;set;} = "";
 
-    public List<Suplidor> lista {get;set;} = new List<Suplidor>();
+    public List<Tennis> lista {get;set;} = new List<Tennis>();
 
         protected override void OnInitialized()
         {
@@ -83,25 +81,22 @@
         {
             if (Filtro == "1")
             {
-                lista = suplidorBLL.GetList(o => o.SuplidorId.ToString().Contains(Criterio));
+                lista = tennisBLL.GetList(o => o.TenniId.ToString().Contains(Criterio));
             }
             else if ((Filtro == "2")){
-                lista = suplidorBLL.GetList(o => (o.Marca ?? "").Contains(Criterio));
+                lista = tennisBLL.GetList(o => o.Marca!.ToLower() ==  Criterio.ToLower());
             }
             else if ((Filtro == "3")){
-                lista = suplidorBLL.GetList(o => o.PrecioVenta.ToString().Contains(Criterio));
+                lista = tennisBLL.GetList(o => o.Costo.ToString() == Criterio.ToLower());
             }
             else if ((Filtro == "4")){
-                lista = suplidorBLL.GetList(o => (o.Email ?? "").Contains(Criterio));
+                lista = tennisBLL.GetList(o => o.Precio.ToString() == Criterio.ToLower());
             }
             else if ((Filtro == "5")){
-                lista = suplidorBLL.GetList(o => (o.Telefono ?? "").Contains(Criterio));
-            }
-            else if ((Filtro == "6")){
-                lista = suplidorBLL.GetList(o => (o.Direccion ?? "").Contains(Criterio));
+                lista = tennisBLL.GetList(o => o.Existencia.ToString() == Criterio.ToLower());
             }
             else{
-                lista = suplidorBLL.GetList(o => true);
+                lista = tennisBLL.GetList(o => true);
             }
         }  
 }

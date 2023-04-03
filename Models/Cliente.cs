@@ -14,5 +14,6 @@ public class Cliente{
     public string? Direccion { get; set; }
     [Required(ErrorMessage = "El campo telefono esta vacio")]
     public string? Telefono { get; set; }
+    public double TotalGastado { get; set; } = 0;
 
 }

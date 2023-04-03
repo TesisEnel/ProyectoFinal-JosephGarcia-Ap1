@@ -26,7 +26,8 @@
                 <option value="4">Ciudad</option>
                 <option value="5">Direccion</option>
                 <option value="6">Telefono</option>
-                <option value="7">Todos</option>
+                <option value="7">TotalGastado</option>
+                <option value="8">Todos</option>
             </select>
         </div>
 
@@ -47,6 +48,7 @@
                 <th>Ciudad</th>
                 <th>Direccion</th>
                 <th>Telefono</th>
+                <th>TotalGastado</th>
             </tr>
         </thead>
         <tbody>
@@ -59,6 +61,7 @@
                     <td>@item.Ciudad</td>
                     <td>@item.Direccion</td>
                     <td>@item.Telefono</td>
+                    <td>@item.TotalGastado</td>
                     <td><a href="cliente/@item.ClienteId">Ver</a></td>
                 </tr>
             }
@@ -86,19 +89,22 @@
                 lista = clienteBLL.GetList(o => o.ClienteId.ToString().Contains(Criterio));
             }
             else if ((Filtro == "2")){
-                lista = clienteBLL.GetList(o => (o.NombreCompleto ?? "").Contains(Criterio));
+                lista = clienteBLL.GetList(o => o.NombreCompleto!.ToLower() == Criterio.ToLower());
             }
             else if ((Filtro == "3")){
-                lista = clienteBLL.GetList(o => (o.Cedula ?? "").Contains(Criterio));
+                lista = clienteBLL.GetList(o => o.Cedula!.ToLower() == Criterio.ToLower());
             }
             else if ((Filtro == "4")){
-                lista = clienteBLL.GetList(o => (o.Ciudad ?? "").Contains(Criterio));
+                lista = clienteBLL.GetList(o => o.Ciudad!.ToLower() == Criterio.ToLower());
             }
             else if ((Filtro == "5")){
-                lista = clienteBLL.GetList(o => (o.Direccion ?? "").Contains(Criterio));
+                lista = clienteBLL.GetList(o => o.Direccion!.ToLower() == Criterio.ToLower());
             }
             else if ((Filtro == "6")){
-                lista = clienteBLL.GetList(o => (o.Telefono ?? "").Contains(Criterio));
+                lista = clienteBLL.GetList(o => o.Telefono!.ToLower() == Criterio.ToLower());
+            }
+            else if ((Filtro == "7")){
+                lista = clienteBLL.GetList(o => o.TotalGastado!.ToString() == Criterio.ToLower());
             }
             else{
                 lista = clienteBLL.GetList(o => true);

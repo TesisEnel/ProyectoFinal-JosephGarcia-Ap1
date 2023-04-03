@@ -1,24 +1,24 @@
-@page "/suplidor"
-@page "/suplidor/{SuplidorId:int}"
+@page "/tennis"
+@page "/tennis/{tenniId:int}"
 
-<PageTitle>Registro Suplidor</PageTitle>
+<PageTitle>Registro Tennis</PageTitle>
 
-@inject SuplidorBLL suplidorBLL
+@inject TennisBLL tennisBLL
 @inject NotificationService notificationService
 
-<EditForm Model="suplidor" OnValidSubmit="Guardar">
+<EditForm Model="tenni" OnValidSubmit="Guardar">
     <DataAnnotationsValidator/>
 
     <div class="card">
         <div class="card-header">
-            <h1> Registo de suplidor </h1>
+            <h1> Registo de tennis </h1>
         </div>
 
         <div class="card-body">
-            @*SuplidorId*@
+            @*TenniId*@
             <div class="form-group">
-                <label>SuplidorId: </label><br>
-                <InputNumber @bind-Value="suplidor.SuplidorId" class="form-control" /> <br>
+                <label>TenniId: </label><br>
+                <InputNumber @bind-Value="tenni.TenniId" class="form-control" /> <br>
                 <button type="button" class="btn btn-primary input-group-text" @onclick="Buscar"><i
                         class="oi oi-magnifying-glass" /> Buscar</button>
             </div>
@@ -26,31 +26,25 @@
             @*Marca*@
             <div class="form-group">
                 <label>Marca: </label><br>
-                <InputText @bind-Value="suplidor.Marca" class="form-control" /> <br>
+                <InputText @bind-Value="tenni.Marca" class="form-control" /> <br>
             </div>
 
-            @*PrecioVenta*@
+            @*Costo*@
             <div class="form-group">
-                <label>Precio de la venta: </label><br>
-                <InputNumber @bind-Value="suplidor.PrecioVenta" class="form-control" /> <br>
+                <label>Costo: </label><br>
+                <InputNumber @bind-Value="tenni.Costo" class="form-control" /> <br>
             </div>
 
-            @*Email*@
+            @*Precio*@
             <div class="form-group">
-                <label>Email: </label><br>
-                <InputText @bind-Value="suplidor.Email" class="form-control" /> <br>
+                <label>Precio: </label><br>
+                <InputNumber @bind-Value="tenni.Precio" class="form-control" /> <br>
             </div>
 
-            @*Telefono*@
+            @*Existencia*@
             <div class="form-group">
-                <label>Telefono: </label><br>
-                <InputText @bind-Value="suplidor.Telefono" class="form-control" /> <br>
-            </div>
-
-            @*Direccion*@
-            <div class="form-group">
-                <label>Direccion: </label><br>
-                <InputText @bind-Value="suplidor.Direccion" class="form-control" /> <br>
+                <label>Existencia: </label><br>
+                <InputNumber @bind-Value="tenni.Existencia" class="form-control" /> <br>
             </div>
         </div>
 
@@ -67,27 +61,27 @@
 @code{
 
     [Parameter]
-    public int SuplidorId { get; set; }
+    public int tenniId { get; set; }
 
-    public Suplidor suplidor { get; set; } = new Suplidor();
+    public Tennis tenni { get; set; } = new Tennis();
 
     protected override void OnInitialized()
     {
-        if (SuplidorId > 0)
+        if (tenniId > 0)
         {
-            this.suplidor.SuplidorId = SuplidorId;
+            this.tenni.TenniId = tenniId;
             this.Buscar();
         }
     }
 
     public void Nuevo()
     {
-        suplidor = new Suplidor();
+        tenni = new Tennis();
     }
 
     bool Validar()
     {
-        if(!String.IsNullOrEmpty(suplidor.Marca)){
+        if(!String.IsNullOrEmpty(tenni.Marca)){
             return true;
         }
 
@@ -99,7 +93,7 @@
     {
         if(!Validar()){return;}
 
-        if(suplidorBLL.Guardar(this.suplidor))
+        if(tennisBLL.Guardar(this.tenni))
         {
             ShowNotification(
                 new NotificationMessage
@@ -114,18 +108,18 @@
 
     private void Buscar()
     {
-        if (suplidor.SuplidorId > 0)
+        if (tenni.TenniId > 0)
         {
-            var encontrado = suplidorBLL.Buscar(suplidor.SuplidorId);
+            var encontrado = tennisBLL.Buscar(tenni.TenniId);
 
             if (encontrado != null)
-                this.suplidor = encontrado;
+                this.tenni = encontrado;
         }
     }
 
     public void Eliminar()
     {
-        if(suplidorBLL.Eliminar(suplidor.SuplidorId)){
+        if(tennisBLL.Eliminar(tenni.TenniId)){
             ShowNotification(
                 new NotificationMessage
                 {

@@ -23,8 +23,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddScoped<ClienteBLL>();
-builder.Services.AddScoped<TennisBLL>();
-builder.Services.AddScoped<PagosTennisBLL>();
+builder.Services.AddScoped<TenisBLL>();
+builder.Services.AddScoped<MarcaBLL>();
+
 
 //Builders de las anotacciones.
 builder.Services.AddScoped<DialogService>();

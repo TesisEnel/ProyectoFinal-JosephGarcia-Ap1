@@ -1,37 +1,34 @@
 public class Contexto : DbContext
 {
     public DbSet<Cliente> Cliente { get; set; }
-    public DbSet<PagosTennis> PagosTennis { get; set; }
-    public DbSet<Tennis> Tennis { get; set; }
+    public DbSet<Tenis> Tenis { get; set; }
+    public DbSet<Marca> Marca { get; set; }
 
     public Contexto(DbContextOptions <Contexto> options) : base(options){}
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder){
-        modelBuilder.Entity<Tennis>().HasData(
-            new Tennis{
-                TenniId = 1,
-                Marca = "Nike",
-                Costo = 80,
-                Precio = 100,
-                Existencia = 50
+    protected override void OnModelCreating(ModelBuilder modelBuilder){
+        modelBuilder.Entity<Marca>().HasData(
+            new Marca{
+                MarcaId = 1,
+                NombreMarca = "Nike"
             }
         );
-        modelBuilder.Entity<Tennis>().HasData(
-            new Tennis{
-                TenniId = 2,
-                Marca = "Adidas",
-                Costo = 50,
-                Precio = 80,
-                Existencia = 50
+        modelBuilder.Entity<Marca>().HasData(
+            new Marca{
+                MarcaId = 2,
+                NombreMarca = "Adidas"
             }
         );
-        modelBuilder.Entity<Tennis>().HasData(
-            new Tennis{
-                TenniId = 3,
-                Marca = "Jordan",
-                Costo = 150,
-                Precio = 200,
-                Existencia = 50
+        modelBuilder.Entity<Marca>().HasData(
+            new Marca{
+                MarcaId = 3,
+                NombreMarca = "UnderArmour"
+            }
+        );
+        modelBuilder.Entity<Marca>().HasData(
+            new Marca{
+                MarcaId = 4,
+                NombreMarca = "Jordan"
             }
         );
     }

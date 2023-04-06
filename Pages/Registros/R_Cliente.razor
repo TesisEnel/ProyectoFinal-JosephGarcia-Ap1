@@ -7,62 +7,79 @@
 @inject NotificationService notificationService
 
 <EditForm Model="cliente" OnValidSubmit="Guardar">
-    <DataAnnotationsValidator/>
+    <DataAnnotationsValidator />
+    <ValidationSummary />
     <div class="card">
         <div class="card-header">
             <h1>Registro para Clientes</h1>
         </div>
-
         <div class="card-body">
 
             @*ClienteId*@
-            <div class="form-group">
-                <label>ClienteId</label><br>
-                <InputNumber @bind-Value= "cliente.ClienteId" class="form-control"/> <br>
-                <button type="button" class="btn btn-primary input-group-text" @onclick="Buscar">
-                    <i class="oi oi-magnifying-glass"/>Buscar</button>
+            <div class="row">
+                <div class="col-3">
+                    <label>Id: </label>
+                    <input type="number" class="form-control" @bind-value="cliente.ClienteId">
+                </div>
+                <div class="col-3 d-flex align-items-end">
+                    <button type="button" class="btn btn-primary" @onclick="Buscar">
+                        <span class="oi oi-magnifying-glass"></span>
+                    </button>
+                </div>
             </div>
 
-            @*NombreCompleto*@
-            <div class="form-group">
-                <label>Nombre</label><br>
-                <InputText @bind-Value="cliente.NombreCompleto" class="form-control"/> <br>
-                <ValidationMessage For="@(() => cliente.NombreCompleto)"/>
+            <div class="row">
+                <div class="col-6">
+                    @*NombreCompleto*@
+                    <label>Nombre: </label>
+                    <InputText @bind-Value="cliente.NombreCompleto" class="form-control" />
+                    <ValidationMessage For="@(() => cliente.NombreCompleto)" />
+                </div>
+                <div class="col-6">
+                    @*Cedula*@
+                    <label>Cédula: </label>
+                    <InputText @bind-Value="cliente.Cedula" class="form-control" />
+                    <ValidationMessage For="@(() => cliente.Cedula)" />
+                </div>
             </div>
 
-            @*Cedula*@
-            <div class="form-group">
-                <label>Cedula</label><br>
-                <InputText @bind-Value="cliente.Cedula" class="form-control"/> <br>
-                <ValidationMessage For="@(() => cliente.Cedula)"/>
+            <div class="row">
+                <div class="col-6">
+                    @*Ciudad*@
+                    <label>Ciudad: </label>
+                    <InputText @bind-Value="cliente.Ciudad" class="form-control" />
+                    <ValidationMessage For="@(() => cliente.Ciudad)" />
+                </div>
+                <div class="col-6">
+                    @*Direccion*@
+                    <label>Dirección: </label>
+                    <InputText @bind-Value="cliente.Direccion" class="form-control" />
+                    <ValidationMessage For="@(() => cliente.Direccion)" />
+                </div>
             </div>
 
-            @*Ciudad*@
-            <div class="form-group">
-                <label>Ciudad</label><br>
-                <InputText @bind-Value="cliente.Ciudad" class="form-control"/> <br>
-                <ValidationMessage For="@(() => cliente.Ciudad)"/>
-            </div>
-
-            @*Direccion*@
-            <div class="form-group">
-                <label>Direccion</label> <br>
-                <InputText @bind-Value="cliente.Direccion" class="form-control"/> <br>
-                <ValidationMessage For="@(() => cliente.Direccion)"/>
-            </div>
-
-            @*Telefono*@
-            <div class="form-group">
-                <label>Telefono</label> <br>
-                <InputText @bind-Value="cliente.Telefono" class="form-control"/> <br>
-                <ValidationMessage For="@(() => cliente.Telefono)"/>
+            <div class="row">
+                <div class="col-6">
+                    @*Telefono*@
+                    <label>Telefono: </label>
+                    <InputText @bind-Value="cliente.Telefono" class="form-control" />
+                    <ValidationMessage For="@(() => cliente.Telefono)" />
+                </div>
+                <div class="col-6">
+                    @*Email*@
+                    <label>Email: </label>
+                    <InputText @bind-Value="cliente.Email" class="form-control" />
+                    <ValidationMessage For="@(() => cliente.Email)" />
+                </div>
             </div>
 
             <div class="card-footer">
                 <div class="form-group text-center" display: inline-block>
-                    <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo"><i class="oi oi-file" /> Nuevo </button>
+                    <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo"><i class="oi oi-file" /> Nuevo
+                    </button>
                     <button type="submit" class="btn btn-lg btn-success"><i class="oi oi-document" /> Guardar </button>
-                    <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar"><i class="oi oi-trash" /> Eliminar </button>
+                    <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar"><i class="oi oi-trash" />
+                        Eliminar </button>
                 </div>
             </div>
         </div>
@@ -70,19 +87,20 @@
 
 </EditForm>
 
-@code{
+@code {
     [Parameter]
-    public int ClienteId {get;set;}
+    public int ClienteId { get; set; }
 
-    public Cliente cliente {get;set;} = new Cliente();
+    public Cliente cliente { get; set; } = new Cliente();
 
     protected override void OnInitialized()
     {
-        if(ClienteId > 0){
-            this.cliente.ClienteId= ClienteId;
-            this.Buscar();  
+        if (ClienteId > 0)
+        {
+            this.cliente.ClienteId = ClienteId;
+            this.Buscar();
         }
-     }
+    }
 
     public void Nuevo()
     {
@@ -91,22 +109,23 @@
 
     bool Validar()
     {
-        if(!String.IsNullOrEmpty(cliente.NombreCompleto)){
+        if (!String.IsNullOrEmpty(cliente.NombreCompleto))
+        {
             return true;
         }
 
         return false;
-    } 
+    }
 
 
     void Guardar()
     {
-        if(!Validar()){return;}
+        if (!Validar()) { return; }
 
-        if(clienteBLL.Guardar(this.cliente))
+        if (clienteBLL.Guardar(this.cliente))
         {
             ShowNotification(
-                new NotificationMessage
+            new NotificationMessage
                 {
                     Severity = NotificationSeverity.Success,
                     Summary = "Se ha guardado con exito."
@@ -118,11 +137,11 @@
 
     private void Buscar()
     {
-        if(cliente.ClienteId > 0)
+        if (cliente.ClienteId > 0)
         {
             var encontrado = clienteBLL.Buscar(cliente.ClienteId);
 
-            if(encontrado != null)
+            if (encontrado != null)
             {
                 this.cliente = encontrado;
             }
@@ -131,9 +150,10 @@
 
     public void Eliminar()
     {
-        if(clienteBLL.Eliminar(cliente.ClienteId)){
+        if (clienteBLL.Eliminar(cliente.ClienteId))
+        {
             ShowNotification(
-                new NotificationMessage
+            new NotificationMessage
                 {
                     Severity = NotificationSeverity.Info,
                     Summary = "Se ha eliminado con exito."
@@ -141,18 +161,19 @@
             );
             Nuevo();
         }
-        else{
+        else
+        {
             ShowNotification(
-                new NotificationMessage
+            new NotificationMessage
                 {
                     Severity = NotificationSeverity.Error,
-                    Summary = "No hay elemento para borrar."
+                    Summary = "No hay elementos para borrar."
                 }
             );
             return;
         }
     }
-    
+
     void ShowNotification(NotificationMessage message)
     {
         notificationService.Notify(message);

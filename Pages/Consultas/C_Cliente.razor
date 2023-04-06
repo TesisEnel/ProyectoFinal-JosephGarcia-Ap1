@@ -26,7 +26,7 @@
                 <option value="4">Ciudad</option>
                 <option value="5">Direccion</option>
                 <option value="6">Telefono</option>
-                <option value="7">TotalGastado</option>
+                <option value="7">Email</option>
                 <option value="8">Todos</option>
             </select>
         </div>
@@ -48,7 +48,7 @@
                 <th>Ciudad</th>
                 <th>Direccion</th>
                 <th>Telefono</th>
-                <th>TotalGastado</th>
+                <th>Email</th>
             </tr>
         </thead>
         <tbody>
@@ -61,7 +61,7 @@
                     <td>@item.Ciudad</td>
                     <td>@item.Direccion</td>
                     <td>@item.Telefono</td>
-                    <td>@item.TotalGastado</td>
+                    <td>@item.Email</td>
                     <td><a href="cliente/@item.ClienteId">Ver</a></td>
                 </tr>
             }
@@ -104,7 +104,7 @@
                 lista = clienteBLL.GetList(o => o.Telefono!.ToLower() == Criterio.ToLower());
             }
             else if ((Filtro == "7")){
-                lista = clienteBLL.GetList(o => o.TotalGastado!.ToString() == Criterio.ToLower());
+                lista = clienteBLL.GetList(o => o.Email!.ToLower() == Criterio.ToLower());
             }
             else{
                 lista = clienteBLL.GetList(o => true);

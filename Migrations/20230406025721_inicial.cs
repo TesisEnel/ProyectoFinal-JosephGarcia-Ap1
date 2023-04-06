@@ -32,6 +32,21 @@ namespace ProyectoFinal.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Entrada",
+                columns: table => new
+                {
+                    EntradaId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    TeniId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Fecha = table.Column<DateOnly>(type: "TEXT", nullable: false),
+                    Cantidad = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Entrada", x => x.EntradaId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Marca",
                 columns: table => new
                 {
@@ -57,7 +72,8 @@ namespace ProyectoFinal.Migrations
                     Color = table.Column<string>(type: "TEXT", nullable: false),
                     Itbis = table.Column<double>(type: "REAL", nullable: false),
                     Size = table.Column<string>(type: "TEXT", nullable: false),
-                    Fecha = table.Column<DateOnly>(type: "TEXT", nullable: false)
+                    Fecha = table.Column<DateOnly>(type: "TEXT", nullable: false),
+                    Existencia = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,6 +97,9 @@ namespace ProyectoFinal.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Cliente");
+
+            migrationBuilder.DropTable(
+                name: "Entrada");
 
             migrationBuilder.DropTable(
                 name: "Marca");

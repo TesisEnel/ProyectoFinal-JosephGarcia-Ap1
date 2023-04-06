@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ProyectoFinal.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20230405231535_inicial")]
+    [Migration("20230406025721_inicial")]
     partial class inicial
     {
         /// <inheritdoc />
@@ -52,6 +52,26 @@ namespace ProyectoFinal.Migrations
                     b.HasKey("ClienteId");
 
                     b.ToTable("Cliente");
+                });
+
+            modelBuilder.Entity("Entrada", b =>
+                {
+                    b.Property<int>("EntradaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("Fecha")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TeniId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("EntradaId");
+
+                    b.ToTable("Entrada");
                 });
 
             modelBuilder.Entity("Marca", b =>
@@ -106,6 +126,9 @@ namespace ProyectoFinal.Migrations
                     b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Existencia")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateOnly>("Fecha")
                         .HasColumnType("TEXT");

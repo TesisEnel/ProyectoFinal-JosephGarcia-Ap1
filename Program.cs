@@ -25,6 +25,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuth
 builder.Services.AddScoped<ClienteBLL>();
 builder.Services.AddScoped<TenisBLL>();
 builder.Services.AddScoped<MarcaBLL>();
+builder.Services.AddScoped<EntradaBLL>();
 
 
 //Builders de las anotacciones.

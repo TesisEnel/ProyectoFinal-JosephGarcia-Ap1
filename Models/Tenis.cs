@@ -19,6 +19,7 @@ public class Tenis{
     public string? Size { get; set;}
     [Required(ErrorMessage ="La fecha es un campo necesario")]
     public DateOnly Fecha { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+    public int Existencia { get; set; } = 0;
 
 
 }

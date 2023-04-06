@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
-public class TenisBLL{
+public class TenisBLL
+{
     private Contexto _contexto;
 
     public TenisBLL(Contexto contexto)
@@ -21,7 +22,7 @@ public class TenisBLL{
     private bool Modificar(Tenis teni)
     {
         var existe = _contexto.Tenis.Find(teni.TeniId);
-        if(existe != null)
+        if (existe != null)
         {
             _contexto.Entry(existe).CurrentValues.SetValues(teni);
             return _contexto.SaveChanges() > 0;
@@ -30,8 +31,27 @@ public class TenisBLL{
         return false;
     }
 
-    public bool Guardar(Tenis teni){
-        if(!Existe(teni.TeniId))
+    public bool VerificarExistencia(Tenis teni)
+    {
+        // Comprobar si el nuevo Teni tiene los mismos valores que algún Teni ya guardado
+        var tenisIguales = _contexto.Tenis.Any(t =>
+            t.Color == teni.Color &&
+            t.Size == teni.Size &&
+            t.MarcaId == teni.MarcaId
+        );
+
+        if (tenisIguales)
+        {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+
+    public bool Guardar(Tenis teni)
+    {
+        if (!Existe(teni.TeniId))
             return this.Insertar(teni);
         else
             return this.Modificar(teni);
@@ -39,9 +59,10 @@ public class TenisBLL{
 
     public bool Eliminar(int teniId)
     {
-        var eliminado  = _contexto.Tenis.Where(o=> o.TeniId == teniId).SingleOrDefault();
+        var eliminado = _contexto.Tenis.Where(o => o.TeniId == teniId).SingleOrDefault();
 
-        if(eliminado!=null){
+        if (eliminado != null)
+        {
             _contexto.Entry(eliminado).State = EntityState.Deleted;
             return _contexto.SaveChanges() > 0;
         }

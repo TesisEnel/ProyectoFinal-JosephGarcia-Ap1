@@ -170,6 +170,18 @@
     {
         if (!Validar()) { return; }
 
+        if(tenisBLL.VerificarExistencia(this.teni) == false)
+        {
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Ya se ha añadido unos tenis con las mismas especificaciones de color, size y marca."
+                }
+            );
+            return;
+        }
+
         if (tenisBLL.Guardar(this.teni))
         {
             ShowNotification(

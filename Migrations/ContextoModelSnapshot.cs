@@ -51,6 +51,26 @@ namespace ProyectoFinal.Migrations
                     b.ToTable("Cliente");
                 });
 
+            modelBuilder.Entity("Entrada", b =>
+                {
+                    b.Property<int>("EntradaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("Fecha")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TeniId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("EntradaId");
+
+                    b.ToTable("Entrada");
+                });
+
             modelBuilder.Entity("Marca", b =>
                 {
                     b.Property<int>("MarcaId")
@@ -103,6 +123,9 @@ namespace ProyectoFinal.Migrations
                     b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Existencia")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateOnly>("Fecha")
                         .HasColumnType("TEXT");

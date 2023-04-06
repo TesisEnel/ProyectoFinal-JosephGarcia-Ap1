@@ -1,0 +1,184 @@
+@page "/entrada"
+@page "/entrada/{EntradaId:int}"
+
+<PageTitle>Entrada</PageTitle>
+
+@inject EntradaBLL entradaBLL
+@inject TenisBLL tenisBLL
+@inject MarcaBLL marcaBLL
+@inject NotificationService notificationService
+
+<EditForm Model="entrada" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="card">
+        <div class="card-header">
+            <h1>Registro de entrada</h1>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        @*EntradaId*@
+        <div class="row">
+            <div class="col-3">
+                <label>Id: </label>
+                <input type="number" class="form-control" @bind-value="entrada.EntradaId">
+            </div>
+            <div class="col-3 d-flex align-items-end">
+                <button type="button" class="btn btn-primary" @onclick="Buscar">
+                    <span class="oi oi-magnifying-glass"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            @*Fecha*@
+            <div class="col-6">
+                <label>Fecha: </label>
+                <InputDate @bind-Value="entrada.Fecha" class="form-control" />
+                <ValidationMessage For="@(() => entrada.Fecha)" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                @*TeniId*@
+                <label>Teni Id: </label>
+                <InputSelect class="form-select" @bind-Value="entrada.TeniId">
+                    @if (entrada.TeniId == 0)
+                    {
+                        entrada.TeniId = 1;
+                    }
+                    @foreach (Tenis item in tenisBLL.GetList(o => true))
+                    {
+                        <option value="@item.MarcaId">@marcaBLL.Buscar(item.MarcaId).NombreMarca - Color: @item.Color,
+                            Size: @item.Size</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => entrada.TeniId)" />
+            </div>
+            <div class="col-6">
+                @*cantidad*@
+                <label>Cantidad: </label>
+                <InputNumber @bind-Value="entrada.Cantidad" class="form-control" />
+                <ValidationMessage For="@(() => entrada.Cantidad)" />
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <div class="form-group text-center" display: inline-block>
+                <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo"><i class="oi oi-file" /> Nuevo
+                </button>
+                <button type="submit" class="btn btn-lg btn-success"><i class="oi oi-document" />
+                    Guardar </button>
+                <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar"><i class="oi oi-trash" />
+                    Eliminar </button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public int EntradaId { get; set; }
+
+    public Entrada entrada { get; set; } = new Entrada();
+
+    protected override void OnInitialized()
+    {
+        if (EntradaId > 0)
+        {
+            this.entrada.EntradaId = EntradaId;
+            this.Buscar();
+        }
+    }
+
+    public void Nuevo()
+    {
+        entrada = new Entrada();
+    }
+
+    bool Validar()
+    {
+        bool Validar = true;
+
+        if (entrada.Cantidad <= 1)
+        {
+            Validar = false;
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "El valor ingresado en la cantidad debe ser mayor que cero."
+                }
+            );
+        }
+
+        return Validar;
+    }
+
+
+    void Guardar()
+    {
+        if (!Validar()) { return; }
+
+        if (entradaBLL.Guardar(this.entrada))
+        {
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Success,
+                    Summary = "Se ha guardado con exito."
+                }
+            );
+            this.Nuevo();
+        }
+    }
+
+    private void Buscar()
+    {
+        if (entrada.EntradaId > 0)
+        {
+            var encontrado = entradaBLL.Buscar(entrada.EntradaId);
+
+            if (encontrado != null)
+            {
+                this.entrada = encontrado;
+            }
+        }
+    }
+
+    public void Eliminar()
+    {
+        if (entradaBLL.Eliminar(entrada.EntradaId))
+        {
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Info,
+                    Summary = "Se ha eliminado con exito."
+                }
+            );
+            Nuevo();
+        }
+        else
+        {
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "No hay elementos para borrar."
+                }
+            );
+            return;
+        }
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        notificationService.Notify(message);
+    }
+}
+

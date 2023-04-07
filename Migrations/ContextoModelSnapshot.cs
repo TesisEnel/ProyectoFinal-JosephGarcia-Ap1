@@ -60,11 +60,19 @@ namespace ProyectoFinal.Migrations
                     b.Property<int>("Cantidad")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateOnly>("Fecha")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("TeniId")
+                    b.Property<int>("MarcaId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Size")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("EntradaId");
 

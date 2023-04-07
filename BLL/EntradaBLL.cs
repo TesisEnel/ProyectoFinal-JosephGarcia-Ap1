@@ -15,14 +15,15 @@ public class EntradaBLL
 
     private bool Insertar(Entrada entrada)
     {
-        var Teni = _contexto.Tenis.Find(entrada.TeniId);
+        var Teni = _contexto.Tenis.FirstOrDefault(t => t.MarcaId == entrada.MarcaId && t.Color == entrada.Color && t.Size == entrada.Size);
         if (Teni != null)
         {
             Teni.Existencia += entrada.Cantidad;
             _contexto.Entry(Teni).State = EntityState.Modified;
+            _contexto.Entrada.Add(entrada);
+            return _contexto.SaveChanges() > 0;
         }
-        _contexto.Entrada.Add(entrada);
-        return _contexto.SaveChanges() > 0;
+        return false;
     }
 
     private bool Modificar(Entrada entrada)
@@ -30,7 +31,7 @@ public class EntradaBLL
         var existe = _contexto.Entrada.Find(entrada.EntradaId);
         if (existe != null)
         {
-            var Teni = _contexto.Tenis.Find(existe.TeniId);
+            var Teni = _contexto.Tenis.Find(existe.MarcaId);
             if (Teni != null)
             {
                 Teni.Existencia += entrada.Cantidad;
@@ -57,7 +58,7 @@ public class EntradaBLL
 
         if (eliminado != null)
         {
-            var Teni = _contexto.Tenis.Find(eliminado.TeniId);
+            var Teni = _contexto.Tenis.Find(eliminado.MarcaId);
             if (Teni != null && _contexto.Entrada.Any(o => o.EntradaId == entradaId))
             {
                 Teni.Existencia -= eliminado.Cantidad;

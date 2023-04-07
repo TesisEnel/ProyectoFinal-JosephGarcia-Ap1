@@ -37,9 +37,11 @@ namespace ProyectoFinal.Migrations
                 {
                     EntradaId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    TeniId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MarcaId = table.Column<int>(type: "INTEGER", nullable: false),
                     Fecha = table.Column<DateOnly>(type: "TEXT", nullable: false),
-                    Cantidad = table.Column<int>(type: "INTEGER", nullable: false)
+                    Cantidad = table.Column<int>(type: "INTEGER", nullable: false),
+                    Color = table.Column<string>(type: "TEXT", nullable: false),
+                    Size = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

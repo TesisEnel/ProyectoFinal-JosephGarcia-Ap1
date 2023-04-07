@@ -44,25 +44,78 @@
         <div class="row">
             <div class="col-6">
                 @*TeniId*@
-                <label>Teni Id: </label>
-                <InputSelect class="form-select" @bind-Value="entrada.TeniId">
-                    @if (entrada.TeniId == 0)
-                    {
-                        entrada.TeniId = 1;
+                <label>MarcaId: </label>
+                <InputSelect class="form-select" @bind-Value="entrada.MarcaId">
+                    @{
+                        var marcasAsociadas = new List<Marca>();
+                        foreach (Tenis tenis in tenisBLL.GetList(o => true))
+                        {
+                            var marcaAsociada = marcaBLL.Buscar(tenis.MarcaId);
+                            if (!marcasAsociadas.Any(m => m.MarcaId == marcaAsociada.MarcaId))
+                            {
+                                marcasAsociadas.Add(marcaAsociada);
+                            }
+                        }
                     }
-                    @foreach (Tenis item in tenisBLL.GetList(o => true))
+                    @foreach (Marca item in marcasAsociadas)
                     {
-                        <option value="@item.MarcaId">@marcaBLL.Buscar(item.MarcaId).NombreMarca - Color: @item.Color,
-                            Size: @item.Size</option>
+                        <option value="@item.MarcaId">@item.NombreMarca</option>
                     }
                 </InputSelect>
-                <ValidationMessage For="@(() => entrada.TeniId)" />
+                <ValidationMessage For="@(() => entrada.MarcaId)" />
             </div>
             <div class="col-6">
                 @*cantidad*@
                 <label>Cantidad: </label>
                 <InputNumber @bind-Value="entrada.Cantidad" class="form-control" />
                 <ValidationMessage For="@(() => entrada.Cantidad)" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                @*Color*@
+                <label>Color: </label>
+                <InputSelect class="form-select" @bind-Value="entrada.Color">
+                    @{
+                        var coloresAsociados = new List<string>();
+                        foreach (Tenis tenis in tenisBLL.GetList(o => o.MarcaId == entrada.MarcaId))
+                        {
+                            if (!coloresAsociados.Contains(tenis.Color))
+                            {
+                                coloresAsociados.Add(tenis.Color);
+                            }
+                        }
+                    }
+                    @foreach (string item in coloresAsociados)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => entrada.Color)" />
+            </div>
+            <div class="col-6">
+                @*Size*@
+                <label>Size: </label>
+                <InputSelect class="form-select" @bind-Value="entrada.Size">
+                    @{
+                        var tallasAsociadas = new List<string>();
+                        foreach (Tenis tenis in tenisBLL.GetList(o => o.MarcaId == entrada.MarcaId && o.Color ==
+                        entrada.Color))
+                        {
+                            if (!tallasAsociadas.Contains(tenis.Size))
+                            {
+                                tallasAsociadas.Add(tenis.Size);
+                            }
+                        }
+                    }
+                    @foreach (string talla in tallasAsociadas)
+                    {
+                        <option value="@talla">@talla</option>
+                    }
+                </InputSelect>
+
+                <ValidationMessage For="@(() => entrada.Size)" />
             </div>
         </div>
 

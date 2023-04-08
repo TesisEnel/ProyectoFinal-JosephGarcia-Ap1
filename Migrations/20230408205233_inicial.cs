@@ -90,7 +90,7 @@ namespace ProyectoFinal.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Fecha = table.Column<DateOnly>(type: "TEXT", nullable: false),
                     ClienteId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Concepto = table.Column<string>(type: "TEXT", nullable: true)
+                    Concepto = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -105,9 +105,11 @@ namespace ProyectoFinal.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     VentaId = table.Column<int>(type: "INTEGER", nullable: false),
                     MarcaId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Color = table.Column<string>(type: "TEXT", nullable: true),
-                    Size = table.Column<string>(type: "TEXT", nullable: true),
-                    Cantidad = table.Column<int>(type: "INTEGER", nullable: false)
+                    Color = table.Column<string>(type: "TEXT", nullable: false),
+                    Size = table.Column<string>(type: "TEXT", nullable: false),
+                    Cantidad = table.Column<int>(type: "INTEGER", nullable: false),
+                    Precio = table.Column<double>(type: "REAL", nullable: false),
+                    TeniId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

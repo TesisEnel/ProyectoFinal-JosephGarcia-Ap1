@@ -4,12 +4,187 @@
 <PageTitle>Venta</PageTitle>
 
 @inject VentaBLL ventaBLL
+@inject ClienteBLL clienteBLL
+@inject TenisBLL tenisBLL
+@inject MarcaBLL marcaBLL
 @inject NotificationService notificationService
+
+<EditForm Model="venta" OnInvalidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="card">
+        <div class="card-header">
+            <h1> Registo de venta</h1>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-3">
+                    <label>Id: </label>
+                    <input type="number" class="form-control" @bind-value="venta.VentaId">
+                </div>
+                <div class="col-3 d-flex align-items-end">
+                    <button type="button" class="btn btn-primary" @onclick="Buscar">
+                        <span class="oi oi-magnifying-glass"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                @*Fecha*@
+                <div class="col-6">
+                    <label>Fecha: </label>
+                    <InputDate @bind-Value="venta.Fecha" class="form-control" />
+                    <ValidationMessage For="@(() => venta.Fecha)" />
+                </div>
+            </div>
+            @*Cliente*@
+            <div class="row">
+                <div class="col-6">
+                    <label>Cliente: </label>
+                    <InputSelect class="form-select" @bind-Value="venta.ClienteId">
+                        @if (venta.ClienteId == 0)
+                        {
+
+                            venta.ClienteId = listaClientes.FirstOrDefault()?.ClienteId ?? 0;
+                        }
+                        @foreach (var clientes in listaClientes)
+                        {
+                            <option value="@clientes.ClienteId">@clientes.NombreCompleto</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => venta.ClienteId)" />
+                </div>
+                @*Concepto*@
+                <div class="col-6">
+                    <label>Concepto: </label>
+                    <InputText @bind-Value="venta.Concepto" class="form-control" />
+                    <ValidationMessage For="@(() => venta.Concepto)" />
+                </div>
+            </div>
+
+            <br>
+
+            @*Detalle*@
+            <div class="card-header">
+                <h1>Detalles de la venta</h1>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    @*TeniId*@
+                    <label>Marca: </label>
+                    <InputSelect class="form-select" @bind-Value="detalle.MarcaId">
+                        @foreach (var item in tenisBLL.GetList(o => true)
+                        .Select(t => marcaBLL.Buscar(t.MarcaId))
+                        .GroupBy(m => m.NombreMarca)
+                        .Select(g => g.First()))
+                        {
+                            <option value="@item.MarcaId">@item.NombreMarca</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => detalle.MarcaId)" />
+                </div>
+                <div class="col-6">
+                    @*cantidad*@
+                    <label>Cantidad: </label>
+                    <InputNumber @bind-Value="detalle.Cantidad" class="form-control" />
+                    <ValidationMessage For="@(() => detalle.Cantidad)" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    @*Color*@
+                    <label>Color: </label>
+                    <InputSelect class="form-select" @bind-Value="detalle.Color">
+                        <option value="" selected>Selecciona un color</option>
+                        @foreach (var color in tenisBLL.GetList(o => o.MarcaId == detalle.MarcaId).Select(t =>
+                        t.Color).Distinct().ToList())
+                        {
+                            <option value="@color">@color</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => detalle.Color)" />
+                </div>
+                <div class="col-3">
+                    @*Size*@
+                    <label>Size: </label>
+                    <InputSelect class="form-select" @bind-Value="detalle.Size">
+                        <option value="" selected>Selecciona un size</option>
+                        @foreach (var size in tenisBLL.GetList(o => o.MarcaId == detalle.MarcaId && o.Color ==
+                        detalle.Color).Select(t => t.Size).Distinct().ToList())
+                        {
+                            <option value="@size">@size</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => detalle.Size)" />
+                </div>
+                @*Boton*@
+                <div class="col-3 d-flex align-items-end">
+                    <button type="button" class="btn btn-success" @onclick="AgregarDetalle">
+                        <i class="oi oi-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+            @*Tabla*@
+            <div class="container">
+                <table class="table table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Id</th>
+                            <th>Marca</th>
+                            <th>Color</th>
+                            <th>Size</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in venta.VentaDetalle)
+                        {
+                            <tr>
+                                <td>@item.VentaDetalleId</td>
+                                <td>@{
+                                        // Buscar la marca correspondiente al MarcaId seleccionado
+                                        var marca = marcaBLL.Buscar(detalle.MarcaId);
+                                        if (marca != null)
+                                        {
+                                            // Mostrar el nombre de la marca si se encuentra
+                                            @marca.NombreMarca
+                                        }
+                                    }</td>
+                                <td>@item.Color</td>
+                                <td>@item.Size</td>
+                                <td>@item.Cantidad</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <label>Total: @total</label>
+        </div>
+
+        <div class="card-footer">
+            <div class="form-group text-center" display: inline-block>
+                <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo"><i class="oi oi-file" /> Nuevo
+                </button>
+                <button type="submit" class="btn btn-lg btn-success" @onclick="Guardar"><i class="oi oi-document" />
+                    Guardar </button>
+                <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar"><i class="oi oi-trash" />
+                    Eliminar </button>
+            </div>
+        </div>
+    </div>
+</EditForm>
 
 @code {
     [Parameter]
     public int VentaId { get; set; }
     public Venta venta { get; set; } = new Venta();
+    public VentaDetalle detalle { get; set; } = new VentaDetalle();
+    public List<Cliente> listaClientes = new List<Cliente>();
+    public int total = 0;
+    public bool detalleGuardado = false;
 
     protected override void OnInitialized()
     {
@@ -18,6 +193,8 @@
             this.venta.VentaId = VentaId;
             this.Buscar();
         }
+
+        listaClientes = clienteBLL.GetList(o => true);
     }
 
     public void Nuevo()
@@ -39,6 +216,31 @@
     void Guardar()
     {
         if (!Validar()) { return; }
+
+        if (String.IsNullOrEmpty(venta.Concepto))
+        {
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "El campo concepto es necesario."
+                }
+            );
+            return;
+        }
+
+        if(detalleGuardado == false)
+        {
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Es necesario que el concepto, el cliente y el detalle de la venta esten llenos correctamente."
+                }
+            );
+            return;
+        }
+        
 
         if (ventaBLL.Guardar(this.venta))
         {
@@ -89,6 +291,31 @@
                 }
             );
             return;
+        }
+    }
+    void AgregarDetalle()
+    {
+        if (detalle.Cantidad > 0 && detalle?.MarcaId != null)
+        {
+            this.venta.VentaDetalle.Add(this.detalle);
+            total += detalle.Cantidad;
+            this.detalle = new VentaDetalle();
+            detalleGuardado =true;
+        }
+    }
+
+    void EliminarDetalle(int detalleId)
+    {
+        if (venta.VentaDetalle != null && detalleId > 0)
+        {
+            venta.VentaDetalle.RemoveAll(o => o.VentaDetalleId == detalleId);
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Info,
+                    Summary = "El detalle se ha eliminado correctamente"
+                }
+            );
         }
     }
 

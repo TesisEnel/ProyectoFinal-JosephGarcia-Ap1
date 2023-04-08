@@ -42,11 +42,11 @@
                     <InputSelect class="form-select" @bind-Value="teni.MarcaId">
                         @if (teni.MarcaId == 0)
                         {
-                            teni.MarcaId = 1;
+                            teni.MarcaId = ListaMarcas.FirstOrDefault().MarcaId;
                         }
-                        @foreach (Marca item in marcaBLL.GetList(o => true))
+                        @foreach (var marcas in ListaMarcas)
                         {
-                            <option value="@item.MarcaId">@item.NombreMarca</option>
+                            <option value="@marcas.MarcaId">@marcas.NombreMarca</option>
                         }
                     </InputSelect>
                     <ValidationMessage For="@(() => teni.MarcaId)" />
@@ -77,13 +77,13 @@
                     @*Color*@
                     <label>Color: </label>
                     <InputSelect class="form-select" @bind-Value="teni.Color">
-                        @if (Colores != null)
+                        @if (ListaColores != null)
                         {
                             if (string.IsNullOrEmpty(teni.Color))
                             {
-                                teni.Color = Colores.FirstOrDefault();
+                                teni.Color = ListaColores.FirstOrDefault();
                             }
-                            @foreach (var item in Colores)
+                            @foreach (var item in ListaColores)
                             {
                                 <option value="@item">@item</option>
                             }
@@ -97,13 +97,13 @@
                     @*Size*@
                     <label>Size: </label>
                     <InputSelect class="form-select" @bind-Value="teni.Size">
-                        @if (Sizes != null)
+                        @if (ListaSizes != null)
                         {
                             if (string.IsNullOrEmpty(teni.Size))
                             {
-                                teni.Size = Sizes.FirstOrDefault();
+                                teni.Size = ListaSizes.FirstOrDefault();
                             }
-                            @foreach (var item in Sizes)
+                            @foreach (var item in ListaSizes)
                             {
                                 <option value="@item">@item</option>
                             }
@@ -138,11 +138,13 @@
     [Parameter]
     public int teniId { get; set; }
     public Tenis teni { get; set; } = new Tenis();
-    public List<string>? Colores = new List<string> { "Rojo", "Blanco", "Negro", "Azul" };
-    public List<string>? Sizes = new List<string> { "6.0", "7.0", "8.0", "8.5", "9.0" };
+    public List<Marca> ListaMarcas = new List<Marca>();
+    public List<string>? ListaColores = new List<string> { "Rojo", "Blanco", "Negro", "Azul" };
+    public List<string>? ListaSizes = new List<string> { "6.0", "7.0", "8.0", "8.5", "9.0" };
 
     protected override void OnInitialized()
     {
+        ListaMarcas = marcaBLL.GetList(o => true);
         if (teniId > 0)
         {
             this.teni.TeniId = teniId;
@@ -170,7 +172,19 @@
     {
         if (!Validar()) { return; }
 
-        if(tenisBLL.VerificarExistencia(this.teni) == false)
+        if (teni.Precio < teni.Costo)
+        {
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "El precio no puede ser mayor que el costo."
+                }
+            );
+            return;
+        }
+
+        if (tenisBLL.VerificarExistencia(this.teni) == false)
         {
             ShowNotification(
             new NotificationMessage

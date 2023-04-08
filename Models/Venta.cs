@@ -4,8 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class Venta{
     [Key]
     public int VentaId { get; set; }
+    [Required(ErrorMessage ="La fecha es un campo necesario.")]
     public DateOnly Fecha { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+    [Required(ErrorMessage ="Seleccionar el cliente es necesario.")]
     public int ClienteId { get; set; }
+    [Required(ErrorMessage ="El concpeto es un campo necesario.")]
     public string? Concepto { get; set; }
     
     [ForeignKey("VentaId")]

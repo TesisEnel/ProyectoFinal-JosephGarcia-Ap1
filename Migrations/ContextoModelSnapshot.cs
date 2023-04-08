@@ -166,6 +166,7 @@ namespace ProyectoFinal.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Concepto")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateOnly>("Fecha")
@@ -186,13 +187,21 @@ namespace ProyectoFinal.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Color")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("MarcaId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<double>("Precio")
+                        .HasColumnType("REAL");
+
                     b.Property<string>("Size")
+                        .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("TeniId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("VentaId")
                         .HasColumnType("INTEGER");

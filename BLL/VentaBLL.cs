@@ -15,12 +15,14 @@ public class VentaBLL
 
     private bool Insertar(Venta venta)
     {
+        InsertarDetalle(venta);
         _contexto.Venta.Add(venta);
         return _contexto.SaveChanges() > 0;
     }
 
     private bool Modificar(Venta venta)
     {
+        ModificarDetalle(venta);
         var existe = _contexto.Venta.Find(venta.VentaId);
         if (existe != null)
         {
@@ -41,19 +43,80 @@ public class VentaBLL
 
     public bool Eliminar(int ventaId)
     {
-        var eliminado = _contexto.Venta.Where(o => o.VentaId == ventaId).SingleOrDefault();
+        var eliminar = _contexto.Venta.Where(o => o.VentaId == ventaId).SingleOrDefault();
 
-        if (eliminado != null)
+        if (eliminar != null)
         {
-            _contexto.Entry(eliminado).State = EntityState.Deleted;
+            foreach (var item in eliminar.VentaDetalle)
+            {
+                var Teni = _contexto.Tenis.FirstOrDefault(t => t.MarcaId == item.MarcaId && t.Color == item.Color && t.Size == item.Size);
+                if (Teni != null)
+                {
+                    Teni.Existencia += item.Cantidad;
+                    _contexto.Entry(Teni).State = EntityState.Modified;
+                    _contexto.SaveChanges();
+                }
+            }
+
+            _contexto.RemoveRange(eliminar.VentaDetalle);
+            _contexto.Entry(eliminar).State = EntityState.Deleted;
             return _contexto.SaveChanges() > 0;
         }
         return false;
     }
 
+    void InsertarDetalle(Venta venta)
+    {
+        if (venta.VentaDetalle != null)
+        {
+            foreach (var item in venta.VentaDetalle)
+            {
+                var Teni = _contexto.Tenis.FirstOrDefault(t => t.MarcaId == item.MarcaId && t.Color == item.Color && t.Size == item.Size);
+                if (Teni != null)
+                {
+                    Teni.Existencia -= item.Cantidad;
+                    _contexto.Entry(Teni).State = EntityState.Modified;
+                }
+            }
+            _contexto.SaveChanges();
+        }
+    }
+
+    void ModificarDetalle(Venta venta)
+    {
+        var VentaAnterior = _contexto.Venta.Where(o => o.VentaId == venta.VentaId).Include(o => o.VentaDetalle).AsNoTracking().SingleOrDefault();
+
+        if (VentaAnterior != null)
+        {
+            foreach (var item in VentaAnterior.VentaDetalle)
+            {
+                var Teni = _contexto.Tenis.FirstOrDefault(t => t.MarcaId == item.MarcaId && t.Color == item.Color && t.Size == item.Size);
+                if (Teni != null)
+                {
+                    Teni.Existencia += item.Cantidad;
+                    _contexto.Entry(Teni).State = EntityState.Modified;
+                    _contexto.SaveChanges();
+
+                }
+            }
+        }
+
+        foreach (var item in venta.VentaDetalle)
+        {
+            var Teni = _contexto.Tenis.FirstOrDefault(t => t.MarcaId == item.MarcaId && t.Color == item.Color && t.Size == item.Size);
+            if (Teni != null)
+            {
+                Teni.Existencia -= item.Cantidad;
+                _contexto.Entry(Teni).State = EntityState.Modified;
+                _contexto.SaveChanges();
+
+            }
+        }
+    }
+
     public Venta? Buscar(int ventaId)
     {
-        return _contexto.Venta.Where(o => o.VentaId == ventaId).AsNoTracking().SingleOrDefault();
+        return _contexto.Venta.Include(o => o.VentaDetalle).Where(o => o.VentaId == ventaId).SingleOrDefault();
     }
 
     public List<Venta> GetList(Expression<Func<Venta, bool>> criterio)

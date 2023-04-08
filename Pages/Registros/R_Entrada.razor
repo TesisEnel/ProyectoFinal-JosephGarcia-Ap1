@@ -15,110 +15,83 @@
         <div class="card-header">
             <h1>Registro de entrada</h1>
         </div>
-    </div>
 
-    <div class="card-body">
+        <div class="card-body">
 
-        @*EntradaId*@
-        <div class="row">
-            <div class="col-3">
-                <label>Id: </label>
-                <input type="number" class="form-control" @bind-value="entrada.EntradaId">
+            @*EntradaId*@
+            <div class="row">
+                <div class="col-3">
+                    <label>Id: </label>
+                    <input type="number" class="form-control" @bind-value="entrada.EntradaId">
+                </div>
+                <div class="col-3 d-flex align-items-end">
+                    <button type="button" class="btn btn-primary" @onclick="Buscar">
+                        <span class="oi oi-magnifying-glass"></span>
+                    </button>
+                </div>
             </div>
-            <div class="col-3 d-flex align-items-end">
-                <button type="button" class="btn btn-primary" @onclick="Buscar">
-                    <span class="oi oi-magnifying-glass"></span>
-                </button>
-            </div>
-        </div>
 
-        <div class="row">
-            @*Fecha*@
-            <div class="col-6">
-                <label>Fecha: </label>
-                <InputDate @bind-Value="entrada.Fecha" class="form-control" />
-                <ValidationMessage For="@(() => entrada.Fecha)" />
+            <div class="row">
+                @*Fecha*@
+                <div class="col-6">
+                    <label>Fecha: </label>
+                    <InputDate @bind-Value="entrada.Fecha" class="form-control" />
+                    <ValidationMessage For="@(() => entrada.Fecha)" />
+                </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-6">
-                @*TeniId*@
-                <label>MarcaId: </label>
-                <InputSelect class="form-select" @bind-Value="entrada.MarcaId">
-                    @{
-                        var marcasAsociadas = new List<Marca>();
-                        foreach (Tenis tenis in tenisBLL.GetList(o => true))
+            <div class="row">
+                <div class="col-6">
+                    @*TeniId*@
+                    <label>Marca: </label>
+                    <InputSelect class="form-select" @bind-Value="entrada.MarcaId">
+                        @foreach (var item in tenisBLL.GetList(o => true)
+                        .Select(t => marcaBLL.Buscar(t.MarcaId))
+                        .GroupBy(m => m.NombreMarca)
+                        .Select(g => g.First()))
                         {
-                            var marcaAsociada = marcaBLL.Buscar(tenis.MarcaId);
-                            if (!marcasAsociadas.Any(m => m.MarcaId == marcaAsociada.MarcaId))
-                            {
-                                marcasAsociadas.Add(marcaAsociada);
-                            }
+                            <option value="@item.MarcaId">@item.NombreMarca</option>
                         }
-                    }
-                    @foreach (Marca item in marcasAsociadas)
-                    {
-                        <option value="@item.MarcaId">@item.NombreMarca</option>
-                    }
-                </InputSelect>
-                <ValidationMessage For="@(() => entrada.MarcaId)" />
+                    </InputSelect>
+                    <ValidationMessage For="@(() => entrada.MarcaId)" />
+                </div>
+                <div class="col-6">
+                    @*cantidad*@
+                    <label>Cantidad: </label>
+                    <InputNumber @bind-Value="entrada.Cantidad" class="form-control" />
+                    <ValidationMessage For="@(() => entrada.Cantidad)" />
+                </div>
             </div>
-            <div class="col-6">
-                @*cantidad*@
-                <label>Cantidad: </label>
-                <InputNumber @bind-Value="entrada.Cantidad" class="form-control" />
-                <ValidationMessage For="@(() => entrada.Cantidad)" />
+
+            <div class="row">
+                <div class="col-6">
+                    @*Color*@
+                    <label>Color: </label>
+                    <InputSelect class="form-select" @bind-Value="entrada.Color">
+                        <option value="" selected>Selecciona un color</option>
+                        @foreach (var color in tenisBLL.GetList(o => o.MarcaId == entrada.MarcaId).Select(t =>
+                        t.Color).Distinct().ToList())
+                        {
+                            <option value="@color">@color</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => entrada.Color)" />
+                </div>
+                <div class="col-6">
+                    @*Size*@
+                    <label>Size: </label>
+                    <InputSelect class="form-select" @bind-Value="entrada.Size">
+                        <option value="" selected>Selecciona un size</option>
+                        @foreach (var size in tenisBLL.GetList(o => o.MarcaId == entrada.MarcaId && o.Color ==
+                        entrada.Color).Select(t => t.Size).Distinct().ToList())
+                        {
+                            <option value="@size">@size</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => entrada.Size)" />
+                </div>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-6">
-                @*Color*@
-                <label>Color: </label>
-                <InputSelect class="form-select" @bind-Value="entrada.Color">
-                    @{
-                        var coloresAsociados = new List<string>();
-                        foreach (Tenis tenis in tenisBLL.GetList(o => o.MarcaId == entrada.MarcaId))
-                        {
-                            if (!coloresAsociados.Contains(tenis.Color))
-                            {
-                                coloresAsociados.Add(tenis.Color);
-                            }
-                        }
-                    }
-                    @foreach (string item in coloresAsociados)
-                    {
-                        <option value="@item">@item</option>
-                    }
-                </InputSelect>
-                <ValidationMessage For="@(() => entrada.Color)" />
-            </div>
-            <div class="col-6">
-                @*Size*@
-                <label>Size: </label>
-                <InputSelect class="form-select" @bind-Value="entrada.Size">
-                    @{
-                        var tallasAsociadas = new List<string>();
-                        foreach (Tenis tenis in tenisBLL.GetList(o => o.MarcaId == entrada.MarcaId && o.Color ==
-                        entrada.Color))
-                        {
-                            if (!tallasAsociadas.Contains(tenis.Size))
-                            {
-                                tallasAsociadas.Add(tenis.Size);
-                            }
-                        }
-                    }
-                    @foreach (string talla in tallasAsociadas)
-                    {
-                        <option value="@talla">@talla</option>
-                    }
-                </InputSelect>
-
-                <ValidationMessage For="@(() => entrada.Size)" />
-            </div>
-        </div>
-
         <div class="card-footer">
             <div class="form-group text-center" display: inline-block>
                 <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo"><i class="oi oi-file" /> Nuevo
@@ -138,6 +111,8 @@
     public int EntradaId { get; set; }
 
     public Entrada entrada { get; set; } = new Entrada();
+
+
 
     protected override void OnInitialized()
     {
@@ -167,6 +142,18 @@
                     Summary = "El valor ingresado en la cantidad debe ser mayor que cero."
                 }
             );
+        }
+
+        if (entrada.MarcaId <= 0)
+        {
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Los campos de la marca, el color y el size deben estar llenados correctamente."
+                }
+            );
+            Validar = false;
         }
 
         return Validar;

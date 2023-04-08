@@ -31,7 +31,7 @@ public class EntradaBLL
         var existe = _contexto.Entrada.Find(entrada.EntradaId);
         if (existe != null)
         {
-            var Teni = _contexto.Tenis.Find(existe.MarcaId);
+            var Teni = _contexto.Tenis.FirstOrDefault(t => t.MarcaId == entrada.MarcaId && t.Color == entrada.Color && t.Size == entrada.Size);
             if (Teni != null)
             {
                 Teni.Existencia += entrada.Cantidad;
@@ -58,7 +58,7 @@ public class EntradaBLL
 
         if (eliminado != null)
         {
-            var Teni = _contexto.Tenis.Find(eliminado.MarcaId);
+            var Teni = _contexto.Tenis.FirstOrDefault(t => t.MarcaId == eliminado.MarcaId && t.Color == eliminado.Color && t.Size == eliminado.Size);
             if (Teni != null && _contexto.Entrada.Any(o => o.EntradaId == entradaId))
             {
                 Teni.Existencia -= eliminado.Cantidad;

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ProyectoFinal.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20230407014807_inicial")]
+    [Migration("20230408022930_inicial")]
     partial class inicial
     {
         /// <inheritdoc />
@@ -157,6 +157,68 @@ namespace ProyectoFinal.Migrations
                     b.HasKey("TeniId");
 
                     b.ToTable("Tenis");
+                });
+
+            modelBuilder.Entity("Venta", b =>
+                {
+                    b.Property<int>("VentaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Concepto")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly>("Fecha")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("VentaId");
+
+                    b.ToTable("Venta");
+                });
+
+            modelBuilder.Entity("VentaDetalle", b =>
+                {
+                    b.Property<int>("VentaDetalleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Color")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MarcaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Size")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("VentaId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("VentaDetalleId");
+
+                    b.HasIndex("VentaId");
+
+                    b.ToTable("VentaDetalle");
+                });
+
+            modelBuilder.Entity("VentaDetalle", b =>
+                {
+                    b.HasOne("Venta", null)
+                        .WithMany("VentaDetalle")
+                        .HasForeignKey("VentaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Venta", b =>
+                {
+                    b.Navigation("VentaDetalle");
                 });
 #pragma warning restore 612, 618
         }

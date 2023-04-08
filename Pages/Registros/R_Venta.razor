@@ -1,0 +1,99 @@
+@page "/venta"
+@page "/venta/{ventaId:int}"
+
+<PageTitle>Venta</PageTitle>
+
+@inject VentaBLL ventaBLL
+@inject NotificationService notificationService
+
+@code {
+    [Parameter]
+    public int VentaId { get; set; }
+    public Venta venta { get; set; } = new Venta();
+
+    protected override void OnInitialized()
+    {
+        if (VentaId > 0)
+        {
+            this.venta.VentaId = VentaId;
+            this.Buscar();
+        }
+    }
+
+    public void Nuevo()
+    {
+        venta = new Venta();
+    }
+
+    bool Validar()
+    {
+        if (!String.IsNullOrEmpty(venta.Concepto))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    void Guardar()
+    {
+        if (!Validar()) { return; }
+
+        if (ventaBLL.Guardar(this.venta))
+        {
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Success,
+                    Summary = "Se ha guardado con exito."
+                }
+            );
+            this.Nuevo();
+        }
+    }
+
+    private void Buscar()
+    {
+        if (venta.VentaId > 0)
+        {
+            var encontrado = ventaBLL.Buscar(venta.VentaId);
+
+            if (encontrado != null)
+            {
+                this.venta = encontrado;
+            }
+        }
+    }
+
+    public void Eliminar()
+    {
+        if (ventaBLL.Eliminar(venta.VentaId))
+        {
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Info,
+                    Summary = "Se ha eliminado con exito."
+                }
+            );
+            Nuevo();
+        }
+        else
+        {
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "No hay elementos para borrar."
+                }
+            );
+            return;
+        }
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        notificationService.Notify(message);
+    }
+}

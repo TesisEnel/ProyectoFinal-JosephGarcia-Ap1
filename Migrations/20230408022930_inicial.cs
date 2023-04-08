@@ -82,6 +82,44 @@ namespace ProyectoFinal.Migrations
                     table.PrimaryKey("PK_Tenis", x => x.TeniId);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Venta",
+                columns: table => new
+                {
+                    VentaId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Fecha = table.Column<DateOnly>(type: "TEXT", nullable: false),
+                    ClienteId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Concepto = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Venta", x => x.VentaId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VentaDetalle",
+                columns: table => new
+                {
+                    VentaDetalleId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    VentaId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MarcaId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Color = table.Column<string>(type: "TEXT", nullable: true),
+                    Size = table.Column<string>(type: "TEXT", nullable: true),
+                    Cantidad = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VentaDetalle", x => x.VentaDetalleId);
+                    table.ForeignKey(
+                        name: "FK_VentaDetalle_Venta_VentaId",
+                        column: x => x.VentaId,
+                        principalTable: "Venta",
+                        principalColumn: "VentaId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "Marca",
                 columns: new[] { "MarcaId", "NombreMarca" },
@@ -92,6 +130,11 @@ namespace ProyectoFinal.Migrations
                     { 3, "UnderArmour" },
                     { 4, "Jordan" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VentaDetalle_VentaId",
+                table: "VentaDetalle",
+                column: "VentaId");
         }
 
         /// <inheritdoc />
@@ -108,6 +151,12 @@ namespace ProyectoFinal.Migrations
 
             migrationBuilder.DropTable(
                 name: "Tenis");
+
+            migrationBuilder.DropTable(
+                name: "VentaDetalle");
+
+            migrationBuilder.DropTable(
+                name: "Venta");
         }
     }
 }

@@ -113,7 +113,6 @@
         {
             return true;
         }
-
         return false;
     }
 
@@ -140,10 +139,26 @@
         if (cliente.ClienteId > 0)
         {
             var encontrado = clienteBLL.Buscar(cliente.ClienteId);
-
             if (encontrado != null)
             {
+                ShowNotification(
+                new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Info,
+                        Summary = "Se ha ecnontrado con exito."
+                    }
+                );
                 this.cliente = encontrado;
+            }
+            else
+            {
+                ShowNotification(
+                new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Summary = "Ingrese un valor existente."
+                    }
+                );
             }
         }
     }

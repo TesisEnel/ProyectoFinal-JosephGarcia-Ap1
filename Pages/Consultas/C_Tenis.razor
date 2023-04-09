@@ -17,6 +17,17 @@
                     <input type="text" class="form-control" @bind="Criterio">
                 </div>
 
+                <div class="col-3">
+                    <label class="form-label">Fecha inicial</label>
+                    <InputDate class="form-control" @bind-Value="FechaInicial" />
+                </div>
+
+                <div class="col-3">
+                    <label class="form-label">Fecha final</label>
+                    <InputDate class="form-control" @bind-Value="FechaFinal" />
+                </div>
+
+
                 <div class="col-2">
                     <label class="form-label">Filtro</label>
                     <select class="form-control" @bind="Filtro">
@@ -83,6 +94,9 @@
 
     public string Filtro { get; set; } = "";
     public string Criterio { get; set; } = "";
+    public DateOnly FechaInicial { get; set; }
+    public DateOnly FechaFinal { get; set; }
+
 
     public List<Tenis> lista { get; set; } = new List<Tenis>();
 
@@ -103,7 +117,7 @@
         }
         else if ((Filtro == "3"))
         {
-            lista = tenisBLL.GetList(o => o.Fecha.ToString().Contains(Criterio));
+            lista = tenisBLL.GetList(o => o.Fecha >= FechaInicial && o.Fecha <= FechaFinal);
         }
         else if ((Filtro == "4"))
         {
@@ -138,4 +152,5 @@
             lista = tenisBLL.GetList(o => true);
         }
     }
+
 }

@@ -34,29 +34,24 @@ public class VentaBLL
         else
             return this.Modificar(venta);
     }
-
-    public bool Eliminar(int ventaId)
+    public bool Eliminar(Venta venta)
     {
-        var eliminar = _contexto.Venta.Where(o => o.VentaId == ventaId).SingleOrDefault();
-
-        if (eliminar != null)
+        foreach (var item in venta.VentaDetalle)
         {
-            foreach (var item in eliminar.VentaDetalle)
+            var Teni = _contexto.Tenis.FirstOrDefault(t => t.Marca == item.Marca && t.Color == item.Color && t.Size == item.Size);
+            if (Teni != null)
             {
-                var Teni = _contexto.Tenis.FirstOrDefault(t => t.Marca == item.Marca && t.Color == item.Color && t.Size == item.Size);
-                if (Teni != null)
-                {
-                    Teni.Existencia += item.Cantidad;
-                    _contexto.Entry(Teni).State = EntityState.Modified;
-                    _contexto.SaveChanges();
-                }
+                Teni.Existencia += item.Cantidad;
+                _contexto.Entry(Teni).State = EntityState.Modified;
+                _contexto.SaveChanges();
             }
-
-            _contexto.RemoveRange(eliminar.VentaDetalle);
-            _contexto.Entry(eliminar).State = EntityState.Deleted;
-            return _contexto.SaveChanges() > 0;
         }
-        return false;
+        
+        _contexto.RemoveRange(venta.VentaDetalle);
+        _contexto.Entry(venta).State = EntityState.Deleted;
+        bool paso = _contexto.SaveChanges() > 0;
+        _contexto.Entry(venta).State = EntityState.Detached;
+        return paso;
     }
 
     void InsertarDetalle(Venta venta)

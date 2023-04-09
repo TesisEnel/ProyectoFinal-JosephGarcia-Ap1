@@ -129,7 +129,6 @@
                 <table class="table table-hover">
                     <thead class="thead-dark">
                         <tr>
-                            <th>Id</th>
                             <th>Marca</th>
                             <th>Color</th>
                             <th>Size</th>
@@ -142,7 +141,6 @@
                         @foreach (var item in venta.VentaDetalle)
                         {
                             <tr>
-                                <td>@item.VentaDetalleId</td>
                                 <td>@item.Marca</td>
                                 <td>@item.Color</td>
                                 <td>@item.Size</td>
@@ -150,7 +148,7 @@
                                 <td>@item.Precio</td>
                                 <td>@item.Itbis</td>
                                 <td> <button class="btn btn-danger mr-2" onclick=@(() =>
-                                    EliminarDetalle(item.VentaDetalleId))>
+                                    EliminarDetalle(item))>
                                         <i class="oi oi-trash"></i>
                                     </button>
                                 </td>
@@ -267,7 +265,7 @@
 
     public void Eliminar()
     {
-        if (ventaBLL.Eliminar(venta.VentaId))
+        if (ventaBLL.Eliminar(venta))
         {
             ShowNotification(
             new NotificationMessage
@@ -305,7 +303,7 @@
             }
         }
 
-        if (detalle.Cantidad > 0 && detalle?.Marca != null)
+        if (detalle.Cantidad > 0 && detalle?.Marca != null && detalle.Color != null && detalle.Size != null)
         {
             if (detalle.Cantidad <= tenisEncontrado!.Existencia)
             {
@@ -327,15 +325,26 @@
                     }
                 );
             }
+        }else
+        {
+                ShowNotification(
+                new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Summary = "Faltan campos por llenar en el detalle."
+                    }
+                );
         }
 
     }
 
-    void EliminarDetalle(int detalleId)
+    void EliminarDetalle(VentaDetalle detalle)
     {
-        if (venta.VentaDetalle != null && detalleId > 0)
+        if (venta.VentaDetalle != null)
         {
-            venta.VentaDetalle.RemoveAll(o => o.VentaDetalleId == detalleId);
+            venta.VentaDetalle.Remove(detalle);
+            venta.Ganancias -= detalle.Precio * detalle.Cantidad;
+            venta.Ganancias -= (venta.Ganancias * 10 / detalle.Itbis);
             ShowNotification(
             new NotificationMessage
                 {

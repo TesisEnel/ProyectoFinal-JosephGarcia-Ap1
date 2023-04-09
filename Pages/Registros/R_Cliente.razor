@@ -7,8 +7,6 @@
 @inject NotificationService notificationService
 
 <EditForm Model="cliente" OnValidSubmit="Guardar">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
     <div class="card">
         <div class="card-header">
             <h1>Registro para Clientes</h1>
@@ -84,6 +82,8 @@
             </div>
         </div>
     </div>
+    <DataAnnotationsValidator />
+    <ValidationSummary />
 
 </EditForm>
 

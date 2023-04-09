@@ -13,5 +13,6 @@ public class VentaDetalle{
     [Range(1, double.MaxValue, ErrorMessage = "La cantidad debe ser mayor que cero.")]
     public int Cantidad { get; set; }
     public double Precio { get; set; }
+    public double Itbis { get; set; }
     public int TeniId { get; set; }
 }

@@ -134,6 +134,8 @@
                             <th>Color</th>
                             <th>Size</th>
                             <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Itbis</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -146,6 +148,7 @@
                                 <td>@item.Size</td>
                                 <td>@item.Cantidad</td>
                                 <td>@item.Precio</td>
+                                <td>@item.Itbis</td>
                                 <td> <button class="btn btn-danger mr-2" onclick=@(() =>
                                     EliminarDetalle(item.VentaDetalleId))>
                                         <i class="oi oi-trash"></i>
@@ -156,7 +159,7 @@
                     </tbody>
                 </table>
             </div>
-            <label>Precio total: @venta.Ganancias</label>
+            <label>Precio total(Itbis incluido): @venta.Ganancias</label>
         </div>
 
         <div class="card-footer">
@@ -289,13 +292,43 @@
     }
     void AgregarDetalle()
     {
+        Tenis tenisEncontrado = null;
+
+        foreach (Tenis tenis in tenisBLL.GetList(o => true))
+        {
+            if (tenis.Marca == detalle.Marca &&
+            tenis.Color == detalle.Color &&
+            tenis.Size == detalle.Size)
+            {
+                tenisEncontrado = tenis;
+                break;
+            }
+        }
+
         if (detalle.Cantidad > 0 && detalle?.Marca != null)
         {
-            this.venta.VentaDetalle.Add(this.detalle);
-            venta.Ganancias += detalle.Precio*detalle.Cantidad;
-            this.detalle = new VentaDetalle();
-            detalleGuardado = true;
+            if (detalle.Cantidad <= tenisEncontrado!.Existencia)
+            {
+                this.venta.VentaDetalle.Add(this.detalle);
+                detalle.Precio = tenisEncontrado.Precio;
+                detalle.Itbis = tenisEncontrado.Itbis;
+                venta.Ganancias += detalle.Precio * detalle.Cantidad;
+                venta.Ganancias *= (1 + (detalle.Itbis/100));
+                this.detalle = new VentaDetalle();
+                detalleGuardado = true;
+            }
+            else
+            {
+                ShowNotification(
+                new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Summary = "La cantidad asignada es mayor a la existente."
+                    }
+                );
+            }
         }
+
     }
 
     void EliminarDetalle(int detalleId)

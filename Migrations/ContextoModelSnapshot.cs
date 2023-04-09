@@ -159,6 +159,9 @@ namespace ProyectoFinal.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<double>("Itbis")
+                        .HasColumnType("REAL");
+
                     b.Property<string>("Marca")
                         .IsRequired()
                         .HasColumnType("TEXT");

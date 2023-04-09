@@ -95,6 +95,7 @@ namespace ProyectoFinal.Migrations
                     Size = table.Column<string>(type: "TEXT", nullable: false),
                     Cantidad = table.Column<int>(type: "INTEGER", nullable: false),
                     Precio = table.Column<double>(type: "REAL", nullable: false),
+                    Itbis = table.Column<double>(type: "REAL", nullable: false),
                     TeniId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ProyectoFinal.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20230409034257_inicial")]
+    [Migration("20230409154835_inicial")]
     partial class inicial
     {
         /// <inheritdoc />
@@ -161,6 +161,9 @@ namespace ProyectoFinal.Migrations
                     b.Property<string>("Color")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<double>("Itbis")
+                        .HasColumnType("REAL");
 
                     b.Property<string>("Marca")
                         .IsRequired()

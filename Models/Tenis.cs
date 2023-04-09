@@ -6,7 +6,7 @@ public class Tenis{
     [Required(ErrorMessage ="La descripción es un campo necesario")]
     public string? Descripcion { get; set; }
     [Required(ErrorMessage ="La marca es un campo necesario")]
-    public int MarcaId { get; set;} 
+    public string? Marca { get; set;} 
     [Range(1, double.MaxValue, ErrorMessage = "El valor ingresado en el costo debe ser mayor que cero.")]
     public double Costo { get; set; }
     [Range(1, double.MaxValue, ErrorMessage = "El precio debe ser mayor que cero.")]

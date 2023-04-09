@@ -24,7 +24,6 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddScoped<ClienteBLL>();
 builder.Services.AddScoped<TenisBLL>();
-builder.Services.AddScoped<MarcaBLL>();
 builder.Services.AddScoped<EntradaBLL>();
 builder.Services.AddScoped<VentaBLL>();
 

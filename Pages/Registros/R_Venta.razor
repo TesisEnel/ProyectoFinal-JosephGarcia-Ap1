@@ -6,7 +6,6 @@
 @inject VentaBLL ventaBLL
 @inject ClienteBLL clienteBLL
 @inject TenisBLL tenisBLL
-@inject MarcaBLL marcaBLL
 @inject NotificationService notificationService
 
 <EditForm Model="venta" OnInvalidSubmit="Guardar">
@@ -73,16 +72,14 @@
                 <div class="col-6">
                     @*TeniId*@
                     <label>Marca: </label>
-                    <InputSelect class="form-select" @bind-Value="detalle.MarcaId">
-                        @foreach (var item in tenisBLL.GetList(o => true)
-                        .Select(t => marcaBLL.Buscar(t.MarcaId))
-                        .GroupBy(m => m.NombreMarca)
-                        .Select(g => g.First()))
+                    <InputSelect class="form-select" @bind-Value="detalle.Marca">
+                        <option value="" selected>Selecciona una marca</option>
+                        @foreach (var marcas in tenisBLL.GetList(o => true).Select(t => t.Marca).Distinct().ToList())
                         {
-                            <option value="@item.MarcaId">@item.NombreMarca</option>
+                            <option value="@marcas">@marcas</option>
                         }
                     </InputSelect>
-                    <ValidationMessage For="@(() => detalle.MarcaId)" />
+                    <ValidationMessage For="@(() => detalle.Marca)" />
                 </div>
                 <div class="col-6">
                     @*cantidad*@
@@ -98,7 +95,7 @@
                     <label>Color: </label>
                     <InputSelect class="form-select" @bind-Value="detalle.Color">
                         <option value="" selected>Selecciona un color</option>
-                        @foreach (var color in tenisBLL.GetList(o => o.MarcaId == detalle.MarcaId).Select(t =>
+                        @foreach (var color in tenisBLL.GetList(o => o.Marca == detalle.Marca).Select(t =>
                         t.Color).Distinct().ToList())
                         {
                             <option value="@color">@color</option>
@@ -111,7 +108,7 @@
                     <label>Size: </label>
                     <InputSelect class="form-select" @bind-Value="detalle.Size">
                         <option value="" selected>Selecciona un size</option>
-                        @foreach (var size in tenisBLL.GetList(o => o.MarcaId == detalle.MarcaId && o.Color ==
+                        @foreach (var size in tenisBLL.GetList(o => o.Marca == detalle.Marca && o.Color ==
                         detalle.Color).Select(t => t.Size).Distinct().ToList())
                         {
                             <option value="@size">@size</option>
@@ -144,24 +141,22 @@
                         {
                             <tr>
                                 <td>@item.VentaDetalleId</td>
-                                <td>@{
-                                        // Buscar la marca correspondiente al MarcaId seleccionado
-                                        var marca = marcaBLL.Buscar(detalle.MarcaId);
-                                        if (marca != null)
-                                        {
-                                            // Mostrar el nombre de la marca si se encuentra
-                                            @marca.NombreMarca
-                                        }
-                                    }</td>
+                                <td>@item.Marca</td>
                                 <td>@item.Color</td>
                                 <td>@item.Size</td>
                                 <td>@item.Cantidad</td>
+                                <td>@item.Precio</td>
+                                <td> <button class="btn btn-danger mr-2" onclick=@(() =>
+                                    EliminarDetalle(item.VentaDetalleId))>
+                                        <i class="oi oi-trash"></i>
+                                    </button>
+                                </td>
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
-            <label>Total: @total</label>
+            <label>Precio total: @venta.Ganancias</label>
         </div>
 
         <div class="card-footer">
@@ -183,7 +178,6 @@
     public Venta venta { get; set; } = new Venta();
     public VentaDetalle detalle { get; set; } = new VentaDetalle();
     public List<Cliente> listaClientes = new List<Cliente>();
-    public int total = 0;
     public bool detalleGuardado = false;
 
     protected override void OnInitialized()
@@ -229,7 +223,7 @@
             return;
         }
 
-        if(detalleGuardado == false)
+        if (detalleGuardado == false)
         {
             ShowNotification(
             new NotificationMessage
@@ -240,9 +234,9 @@
             );
             return;
         }
-        
 
-        if (ventaBLL.Guardar(this.venta))
+
+        if (ventaBLL.Guardar(this.venta) && detalleGuardado == true)
         {
             ShowNotification(
             new NotificationMessage
@@ -295,12 +289,12 @@
     }
     void AgregarDetalle()
     {
-        if (detalle.Cantidad > 0 && detalle?.MarcaId != null)
+        if (detalle.Cantidad > 0 && detalle?.Marca != null)
         {
             this.venta.VentaDetalle.Add(this.detalle);
-            total += detalle.Cantidad;
+            venta.Ganancias += detalle.Precio*detalle.Cantidad;
             this.detalle = new VentaDetalle();
-            detalleGuardado =true;
+            detalleGuardado = true;
         }
     }
 

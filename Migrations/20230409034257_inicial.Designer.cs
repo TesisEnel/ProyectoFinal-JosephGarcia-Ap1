@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ProyectoFinal.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20230408205233_inicial")]
+    [Migration("20230409034257_inicial")]
     partial class inicial
     {
         /// <inheritdoc />
@@ -70,8 +70,9 @@ namespace ProyectoFinal.Migrations
                     b.Property<DateOnly>("Fecha")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("MarcaId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Marca")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Size")
                         .IsRequired()
@@ -80,42 +81,6 @@ namespace ProyectoFinal.Migrations
                     b.HasKey("EntradaId");
 
                     b.ToTable("Entrada");
-                });
-
-            modelBuilder.Entity("Marca", b =>
-                {
-                    b.Property<int>("MarcaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("NombreMarca")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("MarcaId");
-
-                    b.ToTable("Marca");
-
-                    b.HasData(
-                        new
-                        {
-                            MarcaId = 1,
-                            NombreMarca = "Nike"
-                        },
-                        new
-                        {
-                            MarcaId = 2,
-                            NombreMarca = "Adidas"
-                        },
-                        new
-                        {
-                            MarcaId = 3,
-                            NombreMarca = "UnderArmour"
-                        },
-                        new
-                        {
-                            MarcaId = 4,
-                            NombreMarca = "Jordan"
-                        });
                 });
 
             modelBuilder.Entity("Tenis", b =>
@@ -144,8 +109,9 @@ namespace ProyectoFinal.Migrations
                     b.Property<double>("Itbis")
                         .HasColumnType("REAL");
 
-                    b.Property<int>("MarcaId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Marca")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<double>("Precio")
                         .HasColumnType("REAL");
@@ -175,6 +141,9 @@ namespace ProyectoFinal.Migrations
                     b.Property<DateOnly>("Fecha")
                         .HasColumnType("TEXT");
 
+                    b.Property<double>("Ganancias")
+                        .HasColumnType("REAL");
+
                     b.HasKey("VentaId");
 
                     b.ToTable("Venta");
@@ -193,8 +162,9 @@ namespace ProyectoFinal.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("MarcaId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Marca")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<double>("Precio")
                         .HasColumnType("REAL");

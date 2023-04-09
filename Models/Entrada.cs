@@ -4,8 +4,8 @@ public class Entrada
 {
     [Key]
     public int EntradaId { get; set; }
-    [Required(ErrorMessage = "El id de la marca es necesario.")]
-    public int MarcaId { get; set; }
+    [Required(ErrorMessage = "El nombre de la marca es necesario.")]
+    public string? Marca { get; set; }
     [Required(ErrorMessage = "La fecha es necesaria.")]
     public DateOnly Fecha { get; set; } = DateOnly.FromDateTime(DateTime.Now);
     [Range(1, int.MaxValue, ErrorMessage = "El valor ingresado en la cantidad debe ser mayor que cero.")]

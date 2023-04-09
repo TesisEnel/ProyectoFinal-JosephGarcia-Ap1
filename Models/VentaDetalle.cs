@@ -5,7 +5,7 @@ public class VentaDetalle{
     public int VentaDetalleId { get; set; }
     public int VentaId { get; set; }
     [Required(ErrorMessage ="Seleccionar la marca es necesario.")]
-    public int MarcaId { get; set; }
+    public string? Marca { get; set; }
     [Required(ErrorMessage ="Seleccionar el color es necesario.")]
     public string? Color { get; set; }
     [Required(ErrorMessage ="Seleccionar el size es necesario.")]

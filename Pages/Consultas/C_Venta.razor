@@ -1,0 +1,107 @@
+@page "/consultaVenta"
+
+<PageTitle>Consulta Venta</PageTitle>
+
+@inject VentaBLL ventaBLL
+@inject ClienteBLL clienteBLL
+
+<EditForm Model="lista">
+    <div class="card">
+        <div class="card-header">
+            <h1>Consulta de Tenis</h1>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-3">
+                    <label class="form-label">Criterio</label>
+                    <input type="text" class="form-control" @bind="Criterio">
+                </div>
+
+                <div class="col-2">
+                    <label class="form-label">Filtro</label>
+                    <select class="form-control" @bind="Filtro">
+                        <option value="1">Id</option>
+                        <option value="2">Fecha</option>
+                        <option value="3">Concepto</option>
+                        <option value="4">Cliente</option>
+                        <option value="5">Ganancias</option>
+                        <option value="6">Todos</option>
+                    </select>
+                </div>
+
+                <div class="col-3 d-flex align-items-end">
+                    <button type="button" class="btn btn-primary input-group-text" @onclick="Buscar">
+                        <i class="oi oi-magnifying-glass" />Buscar</button>
+                </div>
+
+            </div>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Fecha</th>
+                    <th>Concepto</th>
+                    <th>Cliente</th>
+                    <th>Ganancias</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in lista)
+                {
+                    <tr>
+                        <td>@item.VentaId</td>
+                        <td>@item.Fecha</td>
+                        <td>@item.Concepto</td>
+                        <td>@clienteBLL.Buscar(item.ClienteId).NombreCompleto</td>
+                        <td>@item.Ganancias</td>
+                        <td><a href="venta/@item.VentaId">Ver</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</EditForm>
+
+@code {
+
+    public string Filtro { get; set; } = "";
+    public string Criterio { get; set; } = "";
+
+    public List<Venta> lista { get; set; } = new List<Venta>();
+
+    protected override void OnInitialized()
+    {
+        Buscar();
+    }
+
+    public void Buscar()
+    {
+        if (Filtro == "1")
+        {
+            lista = ventaBLL.GetList(o => o.VentaId.ToString().Contains(Criterio));
+        }
+        else if (Filtro == "2")
+        {
+            lista = ventaBLL.GetList(o => o.Fecha.ToString().Contains(Criterio));
+        }
+        else if (Filtro == "3")
+        {
+            lista = ventaBLL.GetList(o => (o.Concepto ?? "").Contains(Criterio));
+        }
+        else if (Filtro == "4")
+        {
+            lista = ventaBLL.GetList(o => o.ClienteId.ToString().Contains(Criterio));
+        }
+        else if (Filtro == "5")
+        {
+            lista = ventaBLL.GetList(o => o.Ganancias.ToString().Contains(Criterio));
+        }
+        else
+        {
+            lista = ventaBLL.GetList(o => true);
+        }
+    }
+}

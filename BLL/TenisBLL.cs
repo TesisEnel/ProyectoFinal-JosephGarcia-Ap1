@@ -37,7 +37,7 @@ public class TenisBLL
         var tenisIguales = _contexto.Tenis.Any(t =>
             t.Color == teni.Color &&
             t.Size == teni.Size &&
-            t.MarcaId == teni.MarcaId
+            t.Marca == teni.Marca
         );
 
         if (tenisIguales)

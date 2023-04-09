@@ -5,7 +5,6 @@
 
 @inject EntradaBLL entradaBLL
 @inject TenisBLL tenisBLL
-@inject MarcaBLL marcaBLL
 @inject NotificationService notificationService
 
 <EditForm Model="entrada" OnValidSubmit="Guardar">
@@ -44,16 +43,14 @@
                 <div class="col-6">
                     @*TeniId*@
                     <label>Marca: </label>
-                    <InputSelect class="form-select" @bind-Value="entrada.MarcaId">
-                        @foreach (var item in tenisBLL.GetList(o => true)
-                        .Select(t => marcaBLL.Buscar(t.MarcaId))
-                        .GroupBy(m => m.NombreMarca)
-                        .Select(g => g.First()))
+                    <InputSelect class="form-select" @bind-Value="entrada.Marca">
+                        <option value="" selected>Selecciona una marca</option>
+                        @foreach (var marcas in tenisBLL.GetList(o => true).Select(t => t.Marca).Distinct().ToList())
                         {
-                            <option value="@item.MarcaId">@item.NombreMarca</option>
+                            <option value="@marcas">@marcas</option>
                         }
                     </InputSelect>
-                    <ValidationMessage For="@(() => entrada.MarcaId)" />
+                    <ValidationMessage For="@(() => entrada.Marca)" />
                 </div>
                 <div class="col-6">
                     @*cantidad*@
@@ -69,7 +66,7 @@
                     <label>Color: </label>
                     <InputSelect class="form-select" @bind-Value="entrada.Color">
                         <option value="" selected>Selecciona un color</option>
-                        @foreach (var color in tenisBLL.GetList(o => o.MarcaId == entrada.MarcaId).Select(t =>
+                        @foreach (var color in tenisBLL.GetList(o => o.Marca == entrada.Marca).Select(t =>
                         t.Color).Distinct().ToList())
                         {
                             <option value="@color">@color</option>
@@ -82,7 +79,7 @@
                     <label>Size: </label>
                     <InputSelect class="form-select" @bind-Value="entrada.Size">
                         <option value="" selected>Selecciona un size</option>
-                        @foreach (var size in tenisBLL.GetList(o => o.MarcaId == entrada.MarcaId && o.Color ==
+                        @foreach (var size in tenisBLL.GetList(o => o.Marca == entrada.Marca && o.Color ==
                         entrada.Color).Select(t => t.Size).Distinct().ToList())
                         {
                             <option value="@size">@size</option>
@@ -130,11 +127,21 @@
 
     bool Validar()
     {
-        bool Validar = true;
+        if (!string.IsNullOrEmpty(entrada.Marca))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    void Guardar()
+    {
+        if (!Validar()) { return; }
 
         if (entrada.Cantidad <= 1)
         {
-            Validar = false;
             ShowNotification(
             new NotificationMessage
                 {
@@ -144,7 +151,7 @@
             );
         }
 
-        if (entrada.MarcaId <= 0)
+        if (string.IsNullOrEmpty(entrada.Marca))
         {
             ShowNotification(
             new NotificationMessage
@@ -153,16 +160,7 @@
                     Summary = "Los campos de la marca, el color y el size deben estar llenados correctamente."
                 }
             );
-            Validar = false;
         }
-
-        return Validar;
-    }
-
-
-    void Guardar()
-    {
-        if (!Validar()) { return; }
 
         if (entradaBLL.Guardar(this.entrada))
         {

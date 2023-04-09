@@ -3,7 +3,6 @@
 <PageTitle>Consulta Tenis</PageTitle>
 
 @inject TenisBLL tenisBLL
-@inject MarcaBLL marcaBLL
 
 <EditForm Model="lista">
     <div class="card">
@@ -23,14 +22,15 @@
                     <select class="form-control" @bind="Filtro">
                         <option value="1">Id</option>
                         <option value="2">Descripción</option>
-                        <option value="3">Marca</option>
-                        <option value="4">Costo</option>
-                        <option value="5">Precio</option>
-                        <option value="6">Color</option>
-                        <option value="7">Itbis</option>
-                        <option value="8">Size</option>
-                        <option value="9">Existencia</option>
-                        <option value="10">Todos</option>
+                        <option value="3">Fecha</option>
+                        <option value="4">Marca</option>
+                        <option value="5">Costo</option>
+                        <option value="6">Precio</option>
+                        <option value="7">Color</option>
+                        <option value="8">Itbis</option>
+                        <option value="9">Size</option>
+                        <option value="10">Existencia</option>
+                        <option value="11">Todos</option>
                     </select>
                 </div>
 
@@ -47,6 +47,7 @@
                 <tr>
                     <th>Id</th>
                     <th>Descripción</th>
+                    <th>Fecha</th>
                     <th>Marca</th>
                     <th>Costo</th>
                     <th>Precio</th>
@@ -62,7 +63,8 @@
                     <tr>
                         <td>@item.TeniId</td>
                         <td>@item.Descripcion</td>
-                        <td>@marcaBLL.Buscar(item.MarcaId).NombreMarca</td>
+                        <td>@item.Fecha</td>
+                        <td>@item.Marca</td>
                         <td>@item.Costo</td>
                         <td>@item.Precio</td>
                         <td>@item.Color</td>
@@ -97,33 +99,37 @@
         }
         else if ((Filtro == "2"))
         {
-            lista = tenisBLL.GetList(o => o.Descripcion!.ToLower() == Criterio.ToLower());
+            lista = tenisBLL.GetList(o => (o.Descripcion ?? "").Contains(Criterio));
         }
         else if ((Filtro == "3"))
         {
-            lista = tenisBLL.GetList(o => o.MarcaId.ToString().Contains(Criterio));
+            lista = tenisBLL.GetList(o => o.Fecha.ToString().Contains(Criterio));
         }
         else if ((Filtro == "4"))
         {
-            lista = tenisBLL.GetList(o => o.Costo.ToString() == Criterio.ToLower());
+            lista = tenisBLL.GetList(o => (o.Marca ?? "").Contains(Criterio));
         }
         else if ((Filtro == "5"))
         {
-            lista = tenisBLL.GetList(o => o.Precio.ToString() == Criterio.ToLower());
+            lista = tenisBLL.GetList(o => o.Costo.ToString().Contains(Criterio));
         }
         else if ((Filtro == "6"))
         {
-            lista = tenisBLL.GetList(o => o.Color!.ToLower() == Criterio.ToLower());
+            lista = tenisBLL.GetList(o => o.Precio.ToString().Contains(Criterio));
         }
         else if ((Filtro == "7"))
         {
-            lista = tenisBLL.GetList(o => o.Itbis.ToString() == Criterio.ToLower());
+            lista = tenisBLL.GetList(o => (o.Color ?? "").Contains(Criterio));
         }
         else if ((Filtro == "8"))
         {
-            lista = tenisBLL.GetList(o => o.Size!.ToLower() == Criterio.ToLower());
+            lista = tenisBLL.GetList(o => o.Itbis.ToString().Contains(Criterio));
         }
         else if ((Filtro == "9"))
+        {
+            lista = tenisBLL.GetList(o => (o.Size ?? "").Contains(Criterio));
+        }
+        else if ((Filtro == "10"))
         {
             lista = tenisBLL.GetList(o => o.Existencia.ToString().Contains(Criterio));
         }

@@ -8,8 +8,9 @@ public class Venta{
     public DateOnly Fecha { get; set; } = DateOnly.FromDateTime(DateTime.Now);
     [Required(ErrorMessage ="Seleccionar el cliente es necesario.")]
     public int ClienteId { get; set; }
-    [Required(ErrorMessage ="El concpeto es un campo necesario.")]
+    [Required(ErrorMessage ="El concepto es un campo necesario.")]
     public string? Concepto { get; set; }
+    public double Ganancias { get; set; }
     
     [ForeignKey("VentaId")]
     public virtual List<VentaDetalle> VentaDetalle {get; set;} = new List<VentaDetalle>();

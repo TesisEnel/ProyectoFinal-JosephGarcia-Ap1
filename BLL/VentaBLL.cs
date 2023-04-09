@@ -23,14 +23,8 @@ public class VentaBLL
     private bool Modificar(Venta venta)
     {
         ModificarDetalle(venta);
-        var existe = _contexto.Venta.Find(venta.VentaId);
-        if (existe != null)
-        {
-            _contexto.Entry(existe).CurrentValues.SetValues(venta);
-            return _contexto.SaveChanges() > 0;
-        }
-
-        return false;
+        _contexto.Entry(venta).State = EntityState.Modified;
+        return _contexto.SaveChanges() > 0;
     }
 
     public bool Guardar(Venta venta)
@@ -49,7 +43,7 @@ public class VentaBLL
         {
             foreach (var item in eliminar.VentaDetalle)
             {
-                var Teni = _contexto.Tenis.FirstOrDefault(t => t.MarcaId == item.MarcaId && t.Color == item.Color && t.Size == item.Size);
+                var Teni = _contexto.Tenis.FirstOrDefault(t => t.Marca == item.Marca && t.Color == item.Color && t.Size == item.Size);
                 if (Teni != null)
                 {
                     Teni.Existencia += item.Cantidad;
@@ -71,7 +65,7 @@ public class VentaBLL
         {
             foreach (var item in venta.VentaDetalle)
             {
-                var Teni = _contexto.Tenis.FirstOrDefault(t => t.MarcaId == item.MarcaId && t.Color == item.Color && t.Size == item.Size);
+                var Teni = _contexto.Tenis.FirstOrDefault(t => t.Marca == item.Marca && t.Color == item.Color && t.Size == item.Size);
                 if (Teni != null)
                 {
                     Teni.Existencia -= item.Cantidad;
@@ -90,29 +84,28 @@ public class VentaBLL
         {
             foreach (var item in VentaAnterior.VentaDetalle)
             {
-                var Teni = _contexto.Tenis.FirstOrDefault(t => t.MarcaId == item.MarcaId && t.Color == item.Color && t.Size == item.Size);
+                var Teni = _contexto.Tenis.FirstOrDefault(t => t.Marca == item.Marca && t.Color == item.Color && t.Size == item.Size);
                 if (Teni != null)
                 {
                     Teni.Existencia += item.Cantidad;
                     _contexto.Entry(Teni).State = EntityState.Modified;
-                    _contexto.SaveChanges();
-
                 }
             }
         }
 
         foreach (var item in venta.VentaDetalle)
         {
-            var Teni = _contexto.Tenis.FirstOrDefault(t => t.MarcaId == item.MarcaId && t.Color == item.Color && t.Size == item.Size);
+            var Teni = _contexto.Tenis.FirstOrDefault(t => t.Marca == item.Marca && t.Color == item.Color && t.Size == item.Size);
             if (Teni != null)
             {
                 Teni.Existencia -= item.Cantidad;
                 _contexto.Entry(Teni).State = EntityState.Modified;
-                _contexto.SaveChanges();
-
             }
         }
+
+        _contexto.SaveChanges();
     }
+
 
     public Venta? Buscar(int ventaId)
     {

@@ -4,7 +4,6 @@
 <PageTitle>Registro Tenis</PageTitle>
 
 @inject TenisBLL tenisBLL
-@inject MarcaBLL marcaBLL
 @inject NotificationService notificationService
 
 <EditForm Model="teni" OnValidSubmit="Guardar">
@@ -39,17 +38,20 @@
             <div class="row">
                 <div class="col-6">
                     <label>Marca: </label>
-                    <InputSelect class="form-select" @bind-Value="teni.MarcaId">
-                        @if (teni.MarcaId == 0)
+                    <InputSelect class="form-select" @bind-Value="teni.Marca">
+                        @if (ListaMarcas != null)
                         {
-                            teni.MarcaId = ListaMarcas.FirstOrDefault().MarcaId;
-                        }
-                        @foreach (var marcas in ListaMarcas)
-                        {
-                            <option value="@marcas.MarcaId">@marcas.NombreMarca</option>
+                            if (string.IsNullOrEmpty(teni.Marca))
+                            {
+                                teni.Marca = ListaMarcas.FirstOrDefault();
+                            }
+                            @foreach (var item in ListaMarcas)
+                            {
+                                <option value="@item">@item</option>
+                            }
                         }
                     </InputSelect>
-                    <ValidationMessage For="@(() => teni.MarcaId)" />
+                    <ValidationMessage For="@(() => teni.Marca)" />
                 </div>
                 @*Descripcion*@
                 <div class="col-6">
@@ -138,13 +140,12 @@
     [Parameter]
     public int teniId { get; set; }
     public Tenis teni { get; set; } = new Tenis();
-    public List<Marca> ListaMarcas = new List<Marca>();
+    public List<string> ListaMarcas = new List<string> {"Nike", "Under Armour", "Jordan", "Adidas"};
     public List<string>? ListaColores = new List<string> { "Rojo", "Blanco", "Negro", "Azul" };
     public List<string>? ListaSizes = new List<string> { "6.0", "7.0", "8.0", "8.5", "9.0" };
 
     protected override void OnInitialized()
     {
-        ListaMarcas = marcaBLL.GetList(o => true);
         if (teniId > 0)
         {
             this.teni.TeniId = teniId;

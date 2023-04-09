@@ -1,57 +1,65 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿<AuthorizeView Context="Context">
+    <Authorized>
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">ProyectoFinal</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <a class="navbar-brand" href="">Foot Locker</a>
     </div>
 </div>
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+            <hr class="dropdown-divider" />
+            <NavLink class="nav-link" href="cliente" Match="NavLinkMatch.All" style="display:none">
+                <span class="oi oi-person" aria-hidden="true"></span> Cliente
+            </NavLink>
+            <NavLink class="nav-link" href="tenis" Match="NavLinkMatch.All" style="display:none">
+                <span class="oi oi-shoe" aria-hidden="true"></span> Tenis
+            </NavLink>
+            <NavLink class="nav-link" href="entrada" Match="NavLinkMatch.All" style="display:none">
+                <span class="oi oi-dollar" aria-hidden="true"></span> Entrada
+            </NavLink>
+            <NavLink class="nav-link" href="venta" Match="NavLinkMatch.All" style="display:none">
+                <span class="oi oi-dollar" aria-hidden="true"></span> Venta
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="cliente">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> RegistroCliente
+            <span class="nav-link fw-bold" style="color: rgb(255, 255, 255);">Consultas</span>
+            <hr class="dropdown-divider" />
+            <NavLink class="nav-link" href="consultaCliente" Match="NavLinkMatch.All" style="display:none">
+                <span class="oi oi-person" aria-hidden="true"></span> Cliente
             </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="consultaCliente">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> ConsultaCliente
+            <NavLink class="nav-link" href="consultaTenis" Match="NavLinkMatch.All" style="display:none">
+                <span class="oi oi-person" aria-hidden="true"></span> Tenis
             </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="tenis">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> RegistroTenis
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="consultaTenis">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> ConsultaTenis
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="entrada">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> RegistrarEntrada
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="venta">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> RegistrarVenta
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="consultaVenta">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> ConsultarVenta
+            <NavLink class="nav-link" href="consultaVenta" Match="NavLinkMatch.All" style="display:none">
+                <span class="oi oi-person" aria-hidden="true"></span> Venta
             </NavLink>
         </div>
     </nav>
 </div>
 
+
+<details>
+    <summary>Registros</summary>
+    <nav>
+        <a href="cliente"><span class="oi oi-person" aria-hidden="true"></span> Cliente</a>
+        <a href="tenis"><span class="oi oi-cart" aria-hidden="true"></span> Tenis</a>
+        <a href="entrada"><span class="oi oi-briefcase" aria-hidden="true"></span> Entrada</a>
+        <a href="venta"><span class="oi oi-dollar" aria-hidden="true"></span> Venta</a>
+    </nav>
+</details>
+
+<details>
+    <summary>Consultas</summary>
+    <nav>
+        <a href="consultaCliente"><span class="oi oi-person" aria-hidden="true"></span> Cliente</a>
+        <a href="consultaTenis"><span class="oi oi-cart" aria-hidden="true"></span> Tenis</a>
+        <a href="consultaVenta"><span class="oi oi-dollar" aria-hidden="true"></span> Venta</a>
+    </nav>
+</details>
+    </Authorized>
+</AuthorizeView>
 @code {
     private bool collapseNavMenu = true;
 

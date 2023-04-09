@@ -5,141 +5,159 @@
 
 @inject TenisBLL tenisBLL
 @inject NotificationService notificationService
+<AuthorizeView Context="Context">
+    <Authorized>
+        <EditForm Model="teni" OnValidSubmit="Guardar">
+            <DataAnnotationsValidator />
 
-<EditForm Model="teni" OnValidSubmit="Guardar">
-    <DataAnnotationsValidator />
+            <div class="card">
+                <div class="card-header">
+                    <h1> Registo de tenis </h1>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-3">
+                            <label>Id: </label>
+                            <input type="number" class="form-control" @bind-value="teni.TeniId">
+                        </div>
+                        <div class="col-3 d-flex align-items-end">
+                            <button type="button" class="btn btn-primary" @onclick="Buscar">
+                                <span class="oi oi-magnifying-glass"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @*Fecha*@
+                        <div class="col-6">
+                            <label>Fecha: </label>
+                            <InputDate @bind-Value="teni.Fecha" class="form-control" />
+                            <ValidationMessage For="@(() => teni.Fecha)" />
+                        </div>
+                    </div>
+                    @*Marca*@
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Marca: </label>
+                            <InputSelect class="form-select" @bind-Value="teni.Marca">
+                                @if (ListaMarcas != null)
+                                {
+                                    if (string.IsNullOrEmpty(teni.Marca))
+                                    {
+                                        teni.Marca = ListaMarcas.FirstOrDefault();
+                                    }
+                                    @foreach (var item in ListaMarcas)
+                                    {
+                                        <option value="@item">@item</option>
+                                    }
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="@(() => teni.Marca)" />
+                        </div>
+                        @*Descripcion*@
+                        <div class="col-6">
+                            <label>Descripción: </label>
+                            <InputText @bind-Value="teni.Descripcion" class="form-control" />
+                            <ValidationMessage For="@(() => teni.Descripcion)" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            @*Precio*@
+                            <label>Precio: </label>
+                            <InputNumber @bind-Value="teni.Precio" class="form-control" />
+                            <ValidationMessage For="@(() => teni.Precio)" />
+                        </div>
+                        <div class="col-6">
+                            @*Costo*@
+                            <label>Costo: </label>
+                            <InputNumber @bind-Value="teni.Costo" class="form-control" />
+                            <ValidationMessage For="@(() => teni.Costo)" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            @*Color*@
+                            <label>Color: </label>
+                            <InputSelect class="form-select" @bind-Value="teni.Color">
+                                @if (ListaColores != null)
+                                {
+                                    if (string.IsNullOrEmpty(teni.Color))
+                                    {
+                                        teni.Color = ListaColores.FirstOrDefault();
+                                    }
+                                    @foreach (var item in ListaColores)
+                                    {
+                                        <option value="@item">@item</option>
+                                    }
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="@(() => teni.Color)" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            @*Size*@
+                            <label>Size: </label>
+                            <InputSelect class="form-select" @bind-Value="teni.Size">
+                                @if (ListaSizes != null)
+                                {
+                                    if (string.IsNullOrEmpty(teni.Size))
+                                    {
+                                        teni.Size = ListaSizes.FirstOrDefault();
+                                    }
+                                    @foreach (var item in ListaSizes)
+                                    {
+                                        <option value="@item">@item</option>
+                                    }
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="@(() => teni.Size)" />
+                        </div>
+                        <div class="col-6">
+                            @*Itbis*@
+                            <label>Itbis: </label>
+                            <InputNumber @bind-Value="teni.Itbis" class="form-control" />
+                            <ValidationMessage For="@(() => teni.Itbis)" />
+                        </div>
+                    </div>
+                </div>
 
-    <div class="card">
-        <div class="card-header">
-            <h1> Registo de tenis </h1>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-3">
-                    <label>Id: </label>
-                    <input type="number" class="form-control" @bind-value="teni.TeniId">
-                </div>
-                <div class="col-3 d-flex align-items-end">
-                    <button type="button" class="btn btn-primary" @onclick="Buscar">
-                        <span class="oi oi-magnifying-glass"></span>
-                    </button>
+                <div class="card-footer">
+                    <div class="form-group text-center" display: inline-block>
+                        <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo"><i class="oi oi-file" />
+                            Nuevo
+                        </button>
+                        <button type="submit" class="btn btn-lg btn-success"><i class="oi oi-document" />
+                            Guardar </button>
+                        <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar"><i
+                                class="oi oi-trash" />
+                            Eliminar </button>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                @*Fecha*@
-                <div class="col-6">
-                    <label>Fecha: </label>
-                    <InputDate @bind-Value="teni.Fecha" class="form-control" />
-                    <ValidationMessage For="@(() => teni.Fecha)" />
-                </div>
-            </div>
-            @*Marca*@
-            <div class="row">
-                <div class="col-6">
-                    <label>Marca: </label>
-                    <InputSelect class="form-select" @bind-Value="teni.Marca">
-                        @if (ListaMarcas != null)
-                        {
-                            if (string.IsNullOrEmpty(teni.Marca))
-                            {
-                                teni.Marca = ListaMarcas.FirstOrDefault();
-                            }
-                            @foreach (var item in ListaMarcas)
-                            {
-                                <option value="@item">@item</option>
-                            }
-                        }
-                    </InputSelect>
-                    <ValidationMessage For="@(() => teni.Marca)" />
-                </div>
-                @*Descripcion*@
-                <div class="col-6">
-                    <label>Descripción: </label>
-                    <InputText @bind-Value="teni.Descripcion" class="form-control" />
-                    <ValidationMessage For="@(() => teni.Descripcion)" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    @*Precio*@
-                    <label>Precio: </label>
-                    <InputNumber @bind-Value="teni.Precio" class="form-control" />
-                    <ValidationMessage For="@(() => teni.Precio)" />
-                </div>
-                <div class="col-6">
-                    @*Costo*@
-                    <label>Costo: </label>
-                    <InputNumber @bind-Value="teni.Costo" class="form-control" />
-                    <ValidationMessage For="@(() => teni.Costo)" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    @*Color*@
-                    <label>Color: </label>
-                    <InputSelect class="form-select" @bind-Value="teni.Color">
-                        @if (ListaColores != null)
-                        {
-                            if (string.IsNullOrEmpty(teni.Color))
-                            {
-                                teni.Color = ListaColores.FirstOrDefault();
-                            }
-                            @foreach (var item in ListaColores)
-                            {
-                                <option value="@item">@item</option>
-                            }
-                        }
-                    </InputSelect>
-                    <ValidationMessage For="@(() => teni.Color)" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    @*Size*@
-                    <label>Size: </label>
-                    <InputSelect class="form-select" @bind-Value="teni.Size">
-                        @if (ListaSizes != null)
-                        {
-                            if (string.IsNullOrEmpty(teni.Size))
-                            {
-                                teni.Size = ListaSizes.FirstOrDefault();
-                            }
-                            @foreach (var item in ListaSizes)
-                            {
-                                <option value="@item">@item</option>
-                            }
-                        }
-                    </InputSelect>
-                    <ValidationMessage For="@(() => teni.Size)" />
-                </div>
-                <div class="col-6">
-                    @*Itbis*@
-                    <label>Itbis: </label>
-                    <InputNumber @bind-Value="teni.Itbis" class="form-control" />
-                    <ValidationMessage For="@(() => teni.Itbis)" />
+        </EditForm>
+    </Authorized>
+    <NotAuthorized>
+        <div class="card">
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 text-center">
+                        <h1 class="text">Inicio de sesión</h1>
+                        <p>Para acceder a esta página, es necesario iniciar sesión..</p>
+                        <a href="Identity/Account/Login"><button class="btn btn-primary">Iniciar sesión</button></a>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="card-footer">
-            <div class="form-group text-center" display: inline-block>
-                <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo"><i class="oi oi-file" /> Nuevo
-                </button>
-                <button type="submit" class="btn btn-lg btn-success"><i class="oi oi-document" />
-                    Guardar </button>
-                <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar"><i class="oi oi-trash" />
-                    Eliminar </button>
-            </div>
-        </div>
-    </div>
-</EditForm>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
 
     [Parameter]
     public int teniId { get; set; }
     public Tenis teni { get; set; } = new Tenis();
-    public List<string> ListaMarcas = new List<string> {"Nike", "Under Armour", "Jordan", "Adidas"};
+    public List<string> ListaMarcas = new List<string> { "Nike", "Under Armour", "Jordan", "Adidas" };
     public List<string>? ListaColores = new List<string> { "Rojo", "Blanco", "Negro", "Azul" };
     public List<string>? ListaSizes = new List<string> { "6.0", "7.0", "8.0", "8.5", "9.0" };
 

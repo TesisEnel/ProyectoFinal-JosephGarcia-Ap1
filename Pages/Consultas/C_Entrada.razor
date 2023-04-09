@@ -3,7 +3,8 @@
 <PageTitle>Consulta Entrada</PageTitle>
 
 @inject EntradaBLL entradaBLL
-
+<AuthorizeView Context="Context">
+    <Authorized>
 <EditForm Model="lista">
     <div class="card">
         <div class="card-header">
@@ -66,6 +67,21 @@
         </table>
     </div>
 </EditForm>
+    </Authorized>
+    <NotAuthorized>
+        <div class="card">
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 text-center">
+                        <h1 class="text">Inicio de sesión</h1>
+                        <p>Para acceder a esta página, es necesario iniciar sesión..</p>
+                        <a href="Identity/Account/Login"><button class="btn btn-primary">Iniciar sesión</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
 

@@ -3,72 +3,89 @@
 <PageTitle>Consulta cliente</PageTitle>
 
 @inject ClienteBLL clienteBLL
-
-<EditForm Model="lista">
-    <div class="card">
-        <div class="card-header">
-            <h1>Consulta de clientes</h1>
-        </div>
-
-        <div class="card-body">
-            <div class="row">
-                <div class="col-3">
-                    <label class="form-label">Criterio</label>
-                    <input type="text" class="form-control" @bind="Criterio">
+<AuthorizeView Context="Context">
+    <Authorized>
+        <EditForm Model="lista">
+            <div class="card">
+                <div class="card-header">
+                    <h1>Consulta de clientes</h1>
                 </div>
 
-                <div class="col-2">
-                    <label class="form-label">Filtro</label>
-                    <select class="form-control" @bind="Filtro">
-                        <option value="1">Cliente Id</option>
-                        <option value="2">Nombre</option>
-                        <option value="3">Cédula</option>
-                        <option value="4">Ciudad</option>
-                        <option value="5">Dirección</option>
-                        <option value="6">Telefono</option>
-                        <option value="7">Email</option>
-                        <option value="8">Todos</option>
-                    </select>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-3">
+                            <label class="form-label">Criterio</label>
+                            <input type="text" class="form-control" @bind="Criterio">
+                        </div>
+
+                        <div class="col-2">
+                            <label class="form-label">Filtro</label>
+                            <select class="form-control" @bind="Filtro">
+                                <option value="1">Cliente Id</option>
+                                <option value="2">Nombre</option>
+                                <option value="3">Cédula</option>
+                                <option value="4">Ciudad</option>
+                                <option value="5">Dirección</option>
+                                <option value="6">Telefono</option>
+                                <option value="7">Email</option>
+                                <option value="8">Todos</option>
+                            </select>
+                        </div>
+
+                        <div class="col-3 d-flex align-items-end">
+                            <button type="button" class="btn btn-primary input-group-text" @onclick="Buscar">
+                                <i class="oi oi-magnifying-glass" />Buscar</button>
+                        </div>
+
+                    </div>
                 </div>
 
-                <div class="col-3 d-flex align-items-end">
-                    <button type="button" class="btn btn-primary input-group-text" @onclick="Buscar">
-                        <i class="oi oi-magnifying-glass" />Buscar</button>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Cliente Id</th>
+                            <th>Nombre</th>
+                            <th>Cedula</th>
+                            <th>Ciudad</th>
+                            <th>Dirección</th>
+                            <th>Telefono</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in lista)
+                        {
+                            <tr>
+                                <td>@item.ClienteId</td>
+                                <td>@item.NombreCompleto</td>
+                                <td>@item.Cedula</td>
+                                <td>@item.Ciudad</td>
+                                <td>@item.Direccion</td>
+                                <td>@item.Telefono</td>
+                                <td>@item.Email</td>
+                                <td><a href="cliente/@item.ClienteId">Ver</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </EditForm>
+    </Authorized>
+    <NotAuthorized>
+        <div class="card">
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 text-center">
+                        <h1 class="text">Inicio de sesión</h1>
+                        <p>Para acceder a esta página, es necesario iniciar sesión..</p>
+                        <a href="Identity/Account/Login"><button class="btn btn-primary">Iniciar sesión</button></a>
+                    </div>
                 </div>
-
             </div>
         </div>
+    </NotAuthorized>
+</AuthorizeView>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Cliente Id</th>
-                    <th>Nombre</th>
-                    <th>Cedula</th>
-                    <th>Ciudad</th>
-                    <th>Dirección</th>
-                    <th>Telefono</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in lista)
-                {
-                    <tr>
-                        <td>@item.ClienteId</td>
-                        <td>@item.NombreCompleto</td>
-                        <td>@item.Cedula</td>
-                        <td>@item.Ciudad</td>
-                        <td>@item.Direccion</td>
-                        <td>@item.Telefono</td>
-                        <td>@item.Email</td>
-                        <td><a href="cliente/@item.ClienteId">Ver</a></td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-</EditForm>
 
 @code {
 

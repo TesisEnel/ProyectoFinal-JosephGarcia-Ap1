@@ -161,18 +161,6 @@
             );
         }
 
-        if (EntradaId != entrada?.EntradaId)
-        {
-            valido = false;
-            ShowNotification(
-            new NotificationMessage
-                {
-                    Severity = NotificationSeverity.Error,
-                    Summary = "No se puede modificar el ID. Ingrese 0 para crear un nuevo registro."
-                }
-            );
-        }
-
         return valido;
     }
 

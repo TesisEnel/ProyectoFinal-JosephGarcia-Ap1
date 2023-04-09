@@ -9,7 +9,6 @@
 
 <EditForm Model="entrada" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
-    <ValidationSummary />
     <div class="card">
         <div class="card-header">
             <h1>Registro de entrada</h1>
@@ -123,16 +122,42 @@
     public void Nuevo()
     {
         entrada = new Entrada();
+        EntradaId = 0;
     }
 
     bool Validar()
     {
-        if (!string.IsNullOrEmpty(entrada.Marca))
+        bool valido = true;
+        if (String.IsNullOrEmpty(entrada.Marca))
         {
-            return true;
+            valido = false;
         }
 
-        return false;
+        if (entrada!.EntradaId < 0)
+        {
+            valido = false;
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "El Id debe ser mayor a cero."
+                }
+            );
+        }
+
+        if (EntradaId != entrada?.EntradaId)
+        {
+            valido = false;
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "No se puede modificar el ID. Ingrese 0 para crear un nuevo registro."
+                }
+            );
+        }
+
+        return valido;
     }
 
 

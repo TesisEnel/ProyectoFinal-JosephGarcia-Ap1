@@ -83,7 +83,6 @@
         </div>
     </div>
     <DataAnnotationsValidator />
-    <ValidationSummary />
 
 </EditForm>
 
@@ -105,15 +104,42 @@
     public void Nuevo()
     {
         cliente = new Cliente();
+        ClienteId = 0;
     }
 
     bool Validar()
     {
-        if (!String.IsNullOrEmpty(cliente.NombreCompleto))
+        bool valido = true;
+
+        if (String.IsNullOrEmpty(cliente.NombreCompleto))
         {
-            return true;
+            valido = false;
         }
-        return false;
+
+        if (cliente!.ClienteId < 0)
+        {
+            valido = false;
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "El Id debe ser mayor a cero."
+                }
+            );
+        }
+
+        if (ClienteId != cliente?.ClienteId)
+        {
+            valido = false;
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "No se puede modificar el ID. Ingrese 0 para crear un nuevo registro."
+                }
+            );
+        }
+        return valido;
     }
 
 

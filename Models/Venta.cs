@@ -10,7 +10,7 @@ public class Venta{
     public int ClienteId { get; set; }
     [Required(ErrorMessage ="El concepto es un campo necesario.")]
     public string? Concepto { get; set; }
-    public double Ganancias { get; set; }
+    public double Ganancias { get; set; } = 0;
     
     [ForeignKey("VentaId")]
     public virtual List<VentaDetalle> VentaDetalle {get; set;} = new List<VentaDetalle>();

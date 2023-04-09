@@ -8,7 +8,6 @@
 
 <EditForm Model="teni" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
-    <ValidationSummary />
 
     <div class="card">
         <div class="card-header">
@@ -156,16 +155,42 @@
     public void Nuevo()
     {
         teni = new Tenis();
+        teniId = 0;
     }
 
     bool Validar()
     {
-        if (!String.IsNullOrEmpty(teni.Descripcion))
+        bool valido = true;
+        if (String.IsNullOrEmpty(teni.Descripcion))
         {
-            return true;
+            valido = false;
         }
 
-        return false;
+        if (teni!.TeniId < 0)
+        {
+            valido = false;
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "El Id debe ser mayor a cero."
+                }
+            );
+        }
+
+        if (teniId != teni?.TeniId)
+        {
+            valido = false;
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "No se puede modificar el ID. Ingrese 0 para crear un nuevo registro."
+                }
+            );
+        }
+
+        return valido;
     }
 
 

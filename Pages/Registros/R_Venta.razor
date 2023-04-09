@@ -147,8 +147,7 @@
                                 <td>@item.Cantidad</td>
                                 <td>@item.Precio</td>
                                 <td>@item.Itbis</td>
-                                <td> <button class="btn btn-danger mr-2" onclick=@(() =>
-                                    EliminarDetalle(item))>
+                                <td> <button class="btn btn-danger mr-2" onclick=@(() => EliminarDetalle(item))>
                                         <i class="oi oi-trash"></i>
                                     </button>
                                 </td>
@@ -157,7 +156,7 @@
                     </tbody>
                 </table>
             </div>
-            <label>Precio total(Itbis incluido): @venta.Ganancias</label>
+            <label>Precio total(Itbis incluido): @total</label>
         </div>
 
         <div class="card-footer">
@@ -180,6 +179,7 @@
     public VentaDetalle detalle { get; set; } = new VentaDetalle();
     public List<Cliente> listaClientes = new List<Cliente>();
     public bool detalleGuardado = false;
+    public double total = 0;
 
     protected override void OnInitialized()
     {
@@ -195,34 +195,48 @@
     public void Nuevo()
     {
         venta = new Venta();
+        VentaId = 0;
     }
 
     bool Validar()
     {
-        if (!String.IsNullOrEmpty(venta.Concepto))
+        bool valido = true;
+        if (String.IsNullOrEmpty(venta.Concepto))
         {
             return true;
         }
 
-        return false;
+        if (venta!.VentaId < 0)
+        {
+            valido = false;
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "El Id debe ser mayor a cero."
+                }
+            );
+        }
+
+        if (VentaId != venta?.VentaId)
+        {
+            valido = false;
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "No se puede modificar el ID. Ingrese 0 para crear un nuevo registro."
+                }
+            );
+        }
+
+        return valido;
     }
 
 
     void Guardar()
     {
         if (!Validar()) { return; }
-
-        if (String.IsNullOrEmpty(venta.Concepto))
-        {
-            ShowNotification(
-            new NotificationMessage
-                {
-                    Severity = NotificationSeverity.Error,
-                    Summary = "El campo concepto es necesario."
-                }
-            );
-            return;
-        }
 
         if (detalleGuardado == false)
         {
@@ -307,11 +321,12 @@
         {
             if (detalle.Cantidad <= tenisEncontrado!.Existencia)
             {
-                this.venta.VentaDetalle.Add(this.detalle);
                 detalle.Precio = tenisEncontrado.Precio;
                 detalle.Itbis = tenisEncontrado.Itbis;
                 venta.Ganancias += detalle.Precio * detalle.Cantidad;
-                venta.Ganancias *= (1 + (detalle.Itbis/100));
+                venta.Ganancias *= (1 + (detalle.Itbis / 100));
+                total += venta.Ganancias;
+                this.venta.VentaDetalle.Add(this.detalle);
                 this.detalle = new VentaDetalle();
                 detalleGuardado = true;
             }
@@ -325,15 +340,16 @@
                     }
                 );
             }
-        }else
+        }
+        else
         {
-                ShowNotification(
-                new NotificationMessage
-                    {
-                        Severity = NotificationSeverity.Error,
-                        Summary = "Faltan campos por llenar en el detalle."
-                    }
-                );
+            ShowNotification(
+            new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Faltan campos por llenar en el detalle."
+                }
+            );
         }
 
     }
@@ -342,9 +358,8 @@
     {
         if (venta.VentaDetalle != null)
         {
+            total -= venta.Ganancias;
             venta.VentaDetalle.Remove(detalle);
-            venta.Ganancias -= detalle.Precio * detalle.Cantidad;
-            venta.Ganancias -= (venta.Ganancias * 10 / detalle.Itbis);
             ShowNotification(
             new NotificationMessage
                 {

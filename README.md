@@ -49,6 +49,6 @@ Para utilizar la página de venta de tenis siga los siguientes pasos: <br>
 6- Ya dentro del sistema y logeado, tendra  acceso a todas las funcionalidades del mismo. <br>
 
 # Auto evalucación
-![image](https://user-images.githubusercontent.com/122744896/230842826-5d78d9d2-8fc2-47da-b40f-00f6bda55e9b.png)
+![image](https://user-images.githubusercontent.com/122744896/230947122-e1cafa6d-25be-4dc3-ab42-0a91344b23e8.png)
 
 

@@ -34,6 +34,11 @@ Los usuarios pueden vender los tenis a los clientes. La venta de tenis incluye l
 # Tecnologías utilizadas
 La página de venta de tenis fue creada utilizando las siguientes tecnologías: HTML, CSS, C#, BlazorServer. <br>
 
+# Diagrama de base de datos
+
+![image](https://user-images.githubusercontent.com/122744896/230844871-bda15e15-354d-439d-9655-8b7480378347.png)
+
+
 # Instrucciones de uso
 Para utilizar la página de venta de tenis siga los siguientes pasos: <br>
 1- Asegurarse de tener .NET Core SDK instalado. <br>

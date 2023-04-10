@@ -12,12 +12,12 @@ Este es un proyecto de una página web de venta de tenis en línea. La página o
 # Registro de clientes
 Los usuarios pueden registrar los clientes que tendran interaccion. El registro de clientes incluye los siguientes campos:
 
-Nombre
-Correo electrónico
-Ciudad
-Teléfono
-Cédula
-Dirección
+Nombre -
+Correo electrónico -
+Ciudad -
+Teléfono -
+Cédula -
+Dirección -
 
 ![image](https://user-images.githubusercontent.com/122744896/230835494-3eb411d5-32bc-4360-9797-09811983dfcf.png)
 
@@ -25,15 +25,15 @@ Dirección
 # Registro de tenis
 Los usuarios pueden agregar información sobre los tenis que están disponibles para la venta. El registro de tenis incluye los siguientes campos:
 
-Marca
-Precio
-Color
-Size
-Costo
-Itbis
-Descripción
-Precio
-Fecha
+Marca -
+Precio -
+Color -
+Size -
+Costo -
+Itbis -
+Descripción -
+Precio -
+Fecha -
 
 ![image](https://user-images.githubusercontent.com/122744896/230836969-1f1c6bfe-5dc2-460c-bd76-55ca14892e1b.png)
 
@@ -42,11 +42,11 @@ Fecha
 # Aumentar la entrada del teni
 Los usuarios pueden agregar más tenis al inventario cuando los reciban. El aumento de entrada de tenis incluye los siguientes campos:
 
-Marca
-Color
-Size
-Cantidad
-Fecha
+Marca -
+Color -
+Size -
+Cantidad -
+Fecha -
 
 Venta de tenis
 Los usuarios pueden vender los tenis a los clientes. La venta de tenis incluye los siguientes campos:

@@ -5,7 +5,9 @@ Email: probando@gmail.com
 Password: Probando2.0
 
 # Página de venta de tenis
-Este es un proyecto de una página web de venta de tenis en línea. La página ofrece una variedad de marcas populares como Nike, UnderArmour, Adidas, etc. Los usuarios pueden logearse en la propia pagina, y tener acceso a los registros, las consultas y la venta.
+Este proyecto consiste en el desarrollo de una página web dedicada a la venta de tenis en línea. En ella, los usuarios tendrán acceso a una amplia variedad de marcas de renombre como Nike, UnderArmour, Adidas, entre otras. Además, la página web cuenta con una funcionalidad de registro y autenticación, lo que permite a los usuarios tener acceso a registros, consultas y ventas desde una única plataforma.
+
+De esta manera, los usuarios podrán realizar ventas de tenis de manera ágil y segura, ya que todo el proceso se lleva a cabo dentro de la página web, sin tener que recurrir a intermediarios o tiendas físicas. Además, la página web cuenta con una interfaz intuitiva y fácil de usar, lo que permite a los usuarios navegar por ella sin dificultad y encontrar rápidamente los tenis que están buscando.
 
 # La página web tiene las siguientes funcionalidades:
 
@@ -31,19 +33,17 @@ Los usuarios pueden vender los tenis a los clientes. La venta de tenis incluye l
 
 # Tecnologías utilizadas
 La página de venta de tenis fue creada utilizando las siguientes tecnologías: HTML, CSS, C#, BlazorServer. <br>
-prueba <br>
-prueba 2
-Instrucciones de uso
-Para utilizar la página de venta de tenis, primero asegúrese de tener instalado Node.js y MongoDB. Luego, siga los siguientes pasos:
 
-Clone el repositorio.
-Navegue al directorio del repositorio en la línea de comandos.
-Ejecute npm install para instalar las dependencias necesarias.
-Ejecute npm start para iniciar la aplicación.
-Navegue a http://localhost:3000 en su navegador web.
-Contribuyentes
-Este proyecto fue creado por [Nombre del creador o equipo de desarrollo].
+# Instrucciones de uso
+Para utilizar la página de venta de tenis siga los siguientes pasos: <br>
+1- Asegurarse de tener .NET Core SDK instalado. <br>
+2- Descargar el proyecto. <br>
+3- Entrar en powershell, acceder a la carpeta, y dentro de ella utilizar el comando: dotnet run. <br>
+4- Una vez que la aplicación se haya iniciado, se mostrara la pantalla de inicio del sistema. <br>
+5- Inicia sesión en el sistema utilizando las credenciales proporcionadas. <br>
+6- Ya dentro del sistema y logeado, tendra  acceso a todas las funcionalidades del mismo. <br>
 
-Licencia
-Este proyecto está bajo la licencia [Elija una licencia que se adapte a sus necesidades].
+# Auto evalucación
+![image](https://user-images.githubusercontent.com/122744896/230842826-5d78d9d2-8fc2-47da-b40f-00f6bda55e9b.png)
+
 

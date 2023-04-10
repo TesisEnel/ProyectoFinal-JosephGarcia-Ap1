@@ -4,7 +4,7 @@
 Email: probando@gmail.com
 Password: Probando2.0
 
-Página de venta de tenis
+# Página de venta de tenis
 Este es un proyecto de una página web de venta de tenis en línea. La página ofrece una variedad de marcas populares como Nike, UnderArmour, Adidas, etc. Los usuarios pueden logearse en la propia pagina, y tener acceso a los registros, las consultas y la venta.
 
 Funcionalidades

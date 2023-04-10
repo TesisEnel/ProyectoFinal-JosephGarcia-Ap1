@@ -104,7 +104,7 @@ public class VentaBLL
 
     public Venta? Buscar(int ventaId)
     {
-        return _contexto.Venta.Include(o => o.VentaDetalle).Where(o => o.VentaId == ventaId).SingleOrDefault();
+        return _contexto.Venta.Include(o => o.VentaDetalle).Where(o => o.VentaId == ventaId).AsNoTracking().SingleOrDefault();
     }
 
     public List<Venta> GetList(Expression<Func<Venta, bool>> criterio)

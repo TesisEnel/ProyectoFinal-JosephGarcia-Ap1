@@ -32,6 +32,7 @@ Tamaño
 Precio
 La información del tenis se almacena en una base de datos MongoDB.
 
+
 Aumentar la entrada del teni
 Los usuarios pueden agregar más tenis al inventario cuando los reciban. El aumento de entrada de tenis incluye los siguientes campos:
 

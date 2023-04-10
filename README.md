@@ -17,7 +17,7 @@ Correo electrónico -
 Ciudad -
 Teléfono -
 Cédula -
-Dirección -
+Dirección 
 
 ![image](https://user-images.githubusercontent.com/122744896/230835494-3eb411d5-32bc-4360-9797-09811983dfcf.png)
 
@@ -33,7 +33,7 @@ Costo -
 Itbis -
 Descripción -
 Precio -
-Fecha -
+Fecha 
 
 ![image](https://user-images.githubusercontent.com/122744896/230836969-1f1c6bfe-5dc2-460c-bd76-55ca14892e1b.png)
 
@@ -46,7 +46,7 @@ Marca -
 Color -
 Size -
 Cantidad -
-Fecha -
+Fecha 
 
 Venta de tenis
 Los usuarios pueden vender los tenis a los clientes. La venta de tenis incluye los siguientes campos:

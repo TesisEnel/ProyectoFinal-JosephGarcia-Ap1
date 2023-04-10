@@ -7,10 +7,9 @@ Password: Probando2.0
 # Página de venta de tenis
 Este es un proyecto de una página web de venta de tenis en línea. La página ofrece una variedad de marcas populares como Nike, UnderArmour, Adidas, etc. Los usuarios pueden logearse en la propia pagina, y tener acceso a los registros, las consultas y la venta.
 
-Funcionalidades
-La página web tiene las siguientes funcionalidades:
+# La página web tiene las siguientes funcionalidades:
 
-Registro de clientes
+# Registro de clientes
 Los usuarios pueden registrar los clientes que tendran interaccion. El registro de clientes incluye los siguientes campos:
 
 Nombre
@@ -23,24 +22,31 @@ Dirección
 ![image](https://user-images.githubusercontent.com/122744896/230835494-3eb411d5-32bc-4360-9797-09811983dfcf.png)
 
 
-Registro de tenis
-Los usuarios pueden agregar información sobre los tenis que están disponibles para la venta. Esto incluye información sobre la marca, el modelo, el tamaño y el precio. El registro de tenis incluye los siguientes campos:
+# Registro de tenis
+Los usuarios pueden agregar información sobre los tenis que están disponibles para la venta. El registro de tenis incluye los siguientes campos:
 
 Marca
-Modelo
-Tamaño
 Precio
-La información del tenis se almacena en una base de datos MongoDB.
+Color
+Size
+Costo
+Itbis
+Descripción
+Precio
+Fecha
+
+![image](https://user-images.githubusercontent.com/122744896/230836969-1f1c6bfe-5dc2-460c-bd76-55ca14892e1b.png)
 
 
-Aumentar la entrada del teni
+
+# Aumentar la entrada del teni
 Los usuarios pueden agregar más tenis al inventario cuando los reciban. El aumento de entrada de tenis incluye los siguientes campos:
 
 Marca
-Modelo
-Tamaño
+Color
+Size
 Cantidad
-La información de la entrada de tenis se almacena en una base de datos MongoDB.
+Fecha
 
 Venta de tenis
 Los usuarios pueden vender los tenis a los clientes. La venta de tenis incluye los siguientes campos:

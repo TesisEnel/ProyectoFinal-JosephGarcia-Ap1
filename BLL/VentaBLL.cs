@@ -53,6 +53,7 @@ public class VentaBLL
         return guardado;
     }
 
+
     void InsertarDetalle(Venta venta)
     {
         if (venta.VentaDetalle != null)

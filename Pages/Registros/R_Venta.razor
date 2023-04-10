@@ -220,7 +220,7 @@
         bool valido = true;
         if (String.IsNullOrEmpty(venta.Concepto))
         {
-            return false;
+            valido = false;
         }
 
         if (venta!.VentaId < 0)
@@ -243,7 +243,7 @@
     {
         if (!Validar()) { return; }
 
-        if (detalleGuardado == false)
+        if (venta.VentaDetalle.Count < 1)
         {
             ShowNotification(
             new NotificationMessage
@@ -256,7 +256,7 @@
         }
 
 
-        if (ventaBLL.Guardar(this.venta) && detalleGuardado == true)
+        if (ventaBLL.Guardar(this.venta))
         {
             ShowNotification(
             new NotificationMessage
@@ -284,19 +284,24 @@
 
     public void Eliminar()
     {
-        if (ventaBLL.Eliminar(venta))
+        if (ventaBLL.Existe(venta.VentaId))
         {
-            ShowNotification(
-            new NotificationMessage
-                {
-                    Severity = NotificationSeverity.Info,
-                    Summary = "Se ha eliminado con exito."
-                }
-            );
-            Nuevo();
+            if (ventaBLL.Eliminar(venta))
+            {
+                venta = new Venta();
+                detalle = new VentaDetalle();
+                ShowNotification(
+                new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Info,
+                        Summary = "Se ha eliminado con exito."
+                    }
+                );
+
+            }
+
         }
         else
-        {
             ShowNotification(
             new NotificationMessage
                 {
@@ -304,8 +309,7 @@
                     Summary = "No hay elementos para borrar."
                 }
             );
-            return;
-        }
+
     }
     void AgregarDetalle()
     {
@@ -330,8 +334,8 @@
                 venta.Ganancias += detalle.Precio * detalle.Cantidad;
                 total += venta.Ganancias;
                 this.venta.VentaDetalle.Add(this.detalle);
-                this.detalle = new VentaDetalle();
                 detalleGuardado = true;
+                this.detalle = new VentaDetalle();
             }
             else
             {

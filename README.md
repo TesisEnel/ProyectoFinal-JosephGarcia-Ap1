@@ -12,59 +12,27 @@ Este es un proyecto de una página web de venta de tenis en línea. La página o
 # Registro de clientes
 Los usuarios pueden registrar los clientes que tendran interaccion. El registro de clientes incluye los siguientes campos:
 
-Nombre -
-Correo electrónico -
-Ciudad -
-Teléfono -
-Cédula -
-Dirección 
-
 ![image](https://user-images.githubusercontent.com/122744896/230835494-3eb411d5-32bc-4360-9797-09811983dfcf.png)
-
 
 # Registro de tenis
 Los usuarios pueden agregar información sobre los tenis que están disponibles para la venta. El registro de tenis incluye los siguientes campos:
 
-Marca -
-Precio -
-Color -
-Size -
-Costo -
-Itbis -
-Descripción -
-Precio -
-Fecha 
-
 ![image](https://user-images.githubusercontent.com/122744896/230836969-1f1c6bfe-5dc2-460c-bd76-55ca14892e1b.png)
 
-
-
 # Aumentar la entrada del teni
-Los usuarios pueden agregar más tenis al inventario cuando los reciban. El aumento de entrada de tenis incluye los siguientes campos:
+Los usuarios pueden aumentar la existencia de los tenis cuando los reciban. El aumento de entrada de tenis incluye los siguientes campos:
 
-Marca -
-Color -
-Size -
-Cantidad -
-Fecha 
+![image](https://user-images.githubusercontent.com/122744896/230839010-a508b40c-7fc7-4bad-8d86-cd7a9aae5b3a.png)
 
-Venta de tenis
+# Venta de tenis
 Los usuarios pueden vender los tenis a los clientes. La venta de tenis incluye los siguientes campos:
 
-Cliente
-Tenis
-Cantidad
-La información de la venta de tenis se almacena en una base de datos MongoDB.
+![image](https://user-images.githubusercontent.com/122744896/230839088-3f5ffa25-5476-4389-93b1-d2ecfa84197f.png)
 
-Tecnologías utilizadas
-La página de venta de tenis fue creada utilizando las siguientes tecnologías:
-
-HTML
-CSS
-JavaScript
-Node.js
-Express.js
-MongoDB
+# Tecnologías utilizadas
+La página de venta de tenis fue creada utilizando las siguientes tecnologías: HTML, CSS, C#, BlazorServer. <br>
+prueba <br>
+prueba 2
 Instrucciones de uso
 Para utilizar la página de venta de tenis, primero asegúrese de tener instalado Node.js y MongoDB. Luego, siga los siguientes pasos:
 

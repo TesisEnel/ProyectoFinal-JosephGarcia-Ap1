@@ -4,25 +4,21 @@
 
 <AuthorizeView Context="Context">
     <Authorized>
-        <div class="card">
             <div class="text-center">
-                <h1 style="color: rgb(0, 0, 0);">Bienvenido</h1>
-                <h5 style="color: rgb(0, 0, 0);">Joseph Garcia Torres (2020-0447)</h5>
+                <h1 style="color: rgb(255, 0, 0);">Bienvenido</h1>
+                <h5 style="color: rgb(255, 0, 0);">Joseph Garcia Torres (2020-0447)</h5>
             </div>
-        </div>
 
     </Authorized>
     <NotAuthorized>
-        <div class="card">
             <div class="container-fluid">
                 <div class="row justify-content-center">
                     <div class="col-md-6 text-center">
-                        <h1 class="text">Inicio de sesión</h1>
-                        <p>Para acceder a esta página, es necesario iniciar sesión..</p>
+                        <h1 class="text" style="color: rgb(255, 0, 0)">Inicio de sesión</h1>
+                        <p style="color: rgb(255, 0, 0)">Para acceder a esta página, es necesario iniciar sesión..</p>
                         <a href="Identity/Account/Login"><button class="btn btn-primary">Iniciar sesión</button></a>
                     </div>
                 </div>
             </div>
-        </div>
     </NotAuthorized>
 </AuthorizeView>

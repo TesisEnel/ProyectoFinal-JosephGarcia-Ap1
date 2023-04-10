@@ -9,168 +9,170 @@
 @inject NotificationService notificationService
 <AuthorizeView Context="Context">
     <Authorized>
-<EditForm Model="venta" OnInvalidSubmit="Guardar">
-    <DataAnnotationsValidator />
+        <EditForm Model="venta" OnInvalidSubmit="Guardar">
+            <DataAnnotationsValidator />
 
-    <div class="card">
-        <div class="card-header">
-            <h1> Registo de venta</h1>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-3">
-                    <label>Id: </label>
-                    <input type="number" class="form-control" @bind-value="venta.VentaId">
+            <div class="card">
+                <div class="card-header">
+                    <h1> Registo de venta</h1>
                 </div>
-                <div class="col-3 d-flex align-items-end">
-                    <button type="button" class="btn btn-primary" @onclick="Buscar">
-                        <span class="oi oi-magnifying-glass"></span>
-                    </button>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-3">
+                            <label>Id: </label>
+                            <input type="number" class="form-control" @bind-value="venta.VentaId">
+                        </div>
+                        <div class="col-3 d-flex align-items-end">
+                            <button type="button" class="btn btn-primary" @onclick="Buscar">
+                                <span class="oi oi-magnifying-glass"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @*Fecha*@
+                        <div class="col-6">
+                            <label>Fecha: </label>
+                            <InputDate @bind-Value="venta.Fecha" class="form-control" />
+                            <ValidationMessage For="@(() => venta.Fecha)" />
+                        </div>
+                    </div>
+                    @*Cliente*@
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Cliente: </label>
+                            <InputSelect class="form-select" @bind-Value="venta.ClienteId">
+                                @if (venta.ClienteId == 0)
+                                {
+
+                                    venta.ClienteId = listaClientes.FirstOrDefault()?.ClienteId ?? 0;
+                                }
+                                @foreach (var clientes in listaClientes)
+                                {
+                                    <option value="@clientes.ClienteId">@clientes.NombreCompleto</option>
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="@(() => venta.ClienteId)" />
+                        </div>
+                        @*Concepto*@
+                        <div class="col-6">
+                            <label>Concepto: </label>
+                            <InputText @bind-Value="venta.Concepto" class="form-control" />
+                            <ValidationMessage For="@(() => venta.Concepto)" />
+                        </div>
+                    </div>
+
+                    <br>
+
+                    @*Detalle*@
+                    <div class="card-header">
+                        <h1>Detalles de la venta</h1>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            @*TeniId*@
+                            <label>Marca: </label>
+                            <InputSelect class="form-select" @bind-Value="detalle.Marca">
+                                <option value="" selected>Selecciona una marca</option>
+                                @foreach (var marcas in tenisBLL.GetList(o => true).Select(t =>
+                                t.Marca).Distinct().ToList())
+                                {
+                                    <option value="@marcas">@marcas</option>
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="@(() => detalle.Marca)" />
+                        </div>
+                        <div class="col-6">
+                            @*cantidad*@
+                            <label>Cantidad: </label>
+                            <InputNumber @bind-Value="detalle.Cantidad" class="form-control" />
+                            <ValidationMessage For="@(() => detalle.Cantidad)" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            @*Color*@
+                            <label>Color: </label>
+                            <InputSelect class="form-select" @bind-Value="detalle.Color">
+                                <option value="" selected>Selecciona un color</option>
+                                @foreach (var color in tenisBLL.GetList(o => o.Marca == detalle.Marca).Select(t =>
+                                t.Color).Distinct().ToList())
+                                {
+                                    <option value="@color">@color</option>
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="@(() => detalle.Color)" />
+                        </div>
+                        <div class="col-3">
+                            @*Size*@
+                            <label>Size: </label>
+                            <InputSelect class="form-select" @bind-Value="detalle.Size">
+                                <option value="" selected>Selecciona un size</option>
+                                @foreach (var size in tenisBLL.GetList(o => o.Marca == detalle.Marca && o.Color ==
+                                detalle.Color).Select(t => t.Size).Distinct().ToList())
+                                {
+                                    <option value="@size">@size</option>
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="@(() => detalle.Size)" />
+                        </div>
+                        @*Boton*@
+                        <div class="col-3 d-flex align-items-end">
+                            <button type="button" class="btn btn-success" @onclick="AgregarDetalle">
+                                <i class="oi oi-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    @*Tabla*@
+                    <div class="container">
+                        <table class="table table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Marca</th>
+                                    <th>Color</th>
+                                    <th>Size</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in venta.VentaDetalle)
+                                {
+                                    <tr>
+                                        <td>@item.Marca</td>
+                                        <td>@item.Color</td>
+                                        <td>@item.Size</td>
+                                        <td>@item.Cantidad</td>
+                                        <td>@item.Precio</td>
+                                        <td> <button class="btn btn-danger mr-2" onclick=@(() => EliminarDetalle(item))>
+                                                <i class="oi oi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <label>Precio total(Sin Itbis incluido): @venta.Ganancias</label>
+                </div>
+
+                <div class="card-footer">
+                    <div class="form-group text-center" display: inline-block>
+                        <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo"><i class="oi oi-file" />
+                            Nuevo
+                        </button>
+                        <button type="submit" class="btn btn-lg btn-success" @onclick="Guardar"><i
+                                class="oi oi-document" />
+                            Guardar </button>
+                        <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar"><i
+                                class="oi oi-trash" />
+                            Eliminar </button>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                @*Fecha*@
-                <div class="col-6">
-                    <label>Fecha: </label>
-                    <InputDate @bind-Value="venta.Fecha" class="form-control" />
-                    <ValidationMessage For="@(() => venta.Fecha)" />
-                </div>
-            </div>
-            @*Cliente*@
-            <div class="row">
-                <div class="col-6">
-                    <label>Cliente: </label>
-                    <InputSelect class="form-select" @bind-Value="venta.ClienteId">
-                        @if (venta.ClienteId == 0)
-                        {
-
-                            venta.ClienteId = listaClientes.FirstOrDefault()?.ClienteId ?? 0;
-                        }
-                        @foreach (var clientes in listaClientes)
-                        {
-                            <option value="@clientes.ClienteId">@clientes.NombreCompleto</option>
-                        }
-                    </InputSelect>
-                    <ValidationMessage For="@(() => venta.ClienteId)" />
-                </div>
-                @*Concepto*@
-                <div class="col-6">
-                    <label>Concepto: </label>
-                    <InputText @bind-Value="venta.Concepto" class="form-control" />
-                    <ValidationMessage For="@(() => venta.Concepto)" />
-                </div>
-            </div>
-
-            <br>
-
-            @*Detalle*@
-            <div class="card-header">
-                <h1>Detalles de la venta</h1>
-            </div>
-
-            <div class="row">
-                <div class="col-6">
-                    @*TeniId*@
-                    <label>Marca: </label>
-                    <InputSelect class="form-select" @bind-Value="detalle.Marca">
-                        <option value="" selected>Selecciona una marca</option>
-                        @foreach (var marcas in tenisBLL.GetList(o => true).Select(t => t.Marca).Distinct().ToList())
-                        {
-                            <option value="@marcas">@marcas</option>
-                        }
-                    </InputSelect>
-                    <ValidationMessage For="@(() => detalle.Marca)" />
-                </div>
-                <div class="col-6">
-                    @*cantidad*@
-                    <label>Cantidad: </label>
-                    <InputNumber @bind-Value="detalle.Cantidad" class="form-control" />
-                    <ValidationMessage For="@(() => detalle.Cantidad)" />
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-6">
-                    @*Color*@
-                    <label>Color: </label>
-                    <InputSelect class="form-select" @bind-Value="detalle.Color">
-                        <option value="" selected>Selecciona un color</option>
-                        @foreach (var color in tenisBLL.GetList(o => o.Marca == detalle.Marca).Select(t =>
-                        t.Color).Distinct().ToList())
-                        {
-                            <option value="@color">@color</option>
-                        }
-                    </InputSelect>
-                    <ValidationMessage For="@(() => detalle.Color)" />
-                </div>
-                <div class="col-3">
-                    @*Size*@
-                    <label>Size: </label>
-                    <InputSelect class="form-select" @bind-Value="detalle.Size">
-                        <option value="" selected>Selecciona un size</option>
-                        @foreach (var size in tenisBLL.GetList(o => o.Marca == detalle.Marca && o.Color ==
-                        detalle.Color).Select(t => t.Size).Distinct().ToList())
-                        {
-                            <option value="@size">@size</option>
-                        }
-                    </InputSelect>
-                    <ValidationMessage For="@(() => detalle.Size)" />
-                </div>
-                @*Boton*@
-                <div class="col-3 d-flex align-items-end">
-                    <button type="button" class="btn btn-success" @onclick="AgregarDetalle">
-                        <i class="oi oi-plus"></i>
-                    </button>
-                </div>
-            </div>
-
-            @*Tabla*@
-            <div class="container">
-                <table class="table table-hover">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Marca</th>
-                            <th>Color</th>
-                            <th>Size</th>
-                            <th>Cantidad</th>
-                            <th>Precio</th>
-                            <th>Itbis</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in venta.VentaDetalle)
-                        {
-                            <tr>
-                                <td>@item.Marca</td>
-                                <td>@item.Color</td>
-                                <td>@item.Size</td>
-                                <td>@item.Cantidad</td>
-                                <td>@item.Precio</td>
-                                <td>@item.Itbis</td>
-                                <td> <button class="btn btn-danger mr-2" onclick=@(() => EliminarDetalle(item))>
-                                        <i class="oi oi-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-            <label>Precio total(Itbis incluido): @total</label>
-        </div>
-
-        <div class="card-footer">
-            <div class="form-group text-center" display: inline-block>
-                <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo"><i class="oi oi-file" /> Nuevo
-                </button>
-                <button type="submit" class="btn btn-lg btn-success" @onclick="Guardar"><i class="oi oi-document" />
-                    Guardar </button>
-                <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar"><i class="oi oi-trash" />
-                    Eliminar </button>
-            </div>
-        </div>
-    </div>
-</EditForm>
+        </EditForm>
     </Authorized>
     <NotAuthorized>
         <div class="card">
@@ -325,9 +327,7 @@
             if (detalle.Cantidad <= tenisEncontrado!.Existencia)
             {
                 detalle.Precio = tenisEncontrado.Precio;
-                detalle.Itbis = tenisEncontrado.Itbis;
                 venta.Ganancias += detalle.Precio * detalle.Cantidad;
-                venta.Ganancias *= (1 + (detalle.Itbis / 100));
                 total += venta.Ganancias;
                 this.venta.VentaDetalle.Add(this.detalle);
                 this.detalle = new VentaDetalle();
@@ -359,9 +359,23 @@
 
     void EliminarDetalle(VentaDetalle detalle)
     {
+        Tenis tenisEncontrado = null;
+
+        foreach (Tenis tenis in tenisBLL.GetList(o => true))
+        {
+            if (tenis.Marca == detalle.Marca &&
+            tenis.Color == detalle.Color &&
+            tenis.Size == detalle.Size)
+            {
+                tenisEncontrado = tenis;
+                break;
+            }
+        }
         if (venta.VentaDetalle != null)
         {
-            total -= venta.Ganancias;
+            detalle.Precio = tenisEncontrado.Precio;
+            total = detalle.Precio * detalle.Cantidad;
+            venta.Ganancias -= total;
             venta.VentaDetalle.Remove(detalle);
             ShowNotification(
             new NotificationMessage

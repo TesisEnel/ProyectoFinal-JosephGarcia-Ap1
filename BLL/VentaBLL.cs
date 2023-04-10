@@ -48,9 +48,9 @@ public class VentaBLL
         }
         _contexto.RemoveRange(venta.VentaDetalle);
         _contexto.Entry(venta).State = EntityState.Deleted;
-        bool pasar = _contexto.SaveChanges() > 0;
+        bool guardado = _contexto.SaveChanges() > 0;
         _contexto.Entry(venta).State = EntityState.Detached;
-        return pasar;
+        return guardado;
     }
 
     void InsertarDetalle(Venta venta)
